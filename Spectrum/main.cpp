@@ -1,10 +1,10 @@
-#include "SpectrumIDEV3.h"
+#include "Spectrum.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    SpectrumIDEV3 w;
+    Spectrum w;
     w.show();
     return a.exec();
 }

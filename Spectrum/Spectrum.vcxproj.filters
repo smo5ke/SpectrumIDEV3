@@ -23,16 +23,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="SpectrumIDEV3.qrc">
+    <QtRcc Include="Spectrum.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="SpectrumIDEV3.ui">
+    <QtUic Include="Spectrum.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="SpectrumIDEV3.h">
+    <QtMoc Include="Spectrum.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClCompile Include="SpectrumIDEV3.cpp">
+    <ClCompile Include="Spectrum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ResourceCompile Include="$pro_name$.rc">

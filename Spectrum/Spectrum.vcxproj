@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1BD4E0E0-E2F1-4F2F-A6A9-E3E14D0D83D0}</ProjectGuid>
+    <ProjectGuid>{AC2222FB-C055-45DA-87B0-DCB924F9A13C}</ProjectGuid>
     <Keyword>QtVS_v304</Keyword>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0</WindowsTargetPlatformVersion>
@@ -96,10 +96,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <QtRcc Include="SpectrumIDEV3.qrc"/>
-    <QtUic Include="SpectrumIDEV3.ui"/>
-    <QtMoc Include="SpectrumIDEV3.h"/>
-    <ClCompile Include="SpectrumIDEV3.cpp"/>
+    <QtRcc Include="Spectrum.qrc"/>
+    <QtUic Include="Spectrum.ui"/>
+    <QtMoc Include="Spectrum.h"/>
+    <ClCompile Include="Spectrum.cpp"/>
     <ClCompile Include="main.cpp"/>
 
   </ItemGroup>

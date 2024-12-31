@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-#include "ui_Spectrum.h"
 
 class Spectrum : public QMainWindow
 {
@@ -12,5 +11,12 @@ public:
     ~Spectrum();
 
 private:
-    Ui::SpectrumClass ui;
+    QMenuBar* menu{};
+
+private slots:
+    void newFile();
+    void openFile();
+    void saveFile();
+
+
 };

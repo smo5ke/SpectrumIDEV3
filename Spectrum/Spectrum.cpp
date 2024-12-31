@@ -6,12 +6,14 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QFileDialog>
+
 
 Spectrum::Spectrum(QWidget *parent)
     : QMainWindow(parent)
 {
     this->setWindowTitle(" Spectrum V3 - Alif5 Editor");
-    this->setGeometry(800, 400, 600, 400);
+    this->setGeometry(800, 400, 800, 400);
 
     QWidget* center = new QWidget(this);
     QVBoxLayout* vlay = new QVBoxLayout(center);
@@ -25,16 +27,18 @@ Spectrum::Spectrum(QWidget *parent)
     QAction* newAction = new QAction("جديد", this);
     QAction* openAction = new QAction("فتح", this);
     QAction* saveAction = new QAction("حفظ", this);
+    QAction* saveAsAction = new QAction("حفظ باسم", this);
 
     fileMenu->addAction(newAction);
     fileMenu->addAction(openAction);
     //fileMenu->addSeparator();
     fileMenu->addAction(saveAction);
+    fileMenu->addAction(saveAsAction);
 
 
 
 
-    SyntaxHighlighter* editor = new SyntaxHighlighter(center);
+    editor = new SyntaxHighlighter(center);
     editor->setTabStopDistance(32);
     editor->setStyleSheet("QTextEdit { background-color: #151729; color: #ffffff; }");
     editor->setFont(QFont("Tajawal", 12, 500));
@@ -56,6 +60,9 @@ Spectrum::Spectrum(QWidget *parent)
 
 
     connect(newAction, &QAction::triggered, this, &Spectrum::newFile);
+    connect(openAction, &QAction::triggered, this, &Spectrum::openFile);
+    connect(saveAction, &QAction::triggered, this, &Spectrum::saveFile);
+    connect(saveAsAction, &QAction::triggered, this, &Spectrum::saveFileAs);
 }
 
 Spectrum::~Spectrum()
@@ -64,13 +71,85 @@ Spectrum::~Spectrum()
 
 
 void Spectrum::newFile() {
-    QMessageBox::information(this, tr("New File"), tr("New file action triggered"));
+    if (maybeSave()) {
+        // Clear the text edit widget to start a new file
+        editor->clear();
+        currentFile.clear();
+    }
 }
 
 void Spectrum::openFile() {
-
+    if (maybeSave()) {
+        QString fileName = QFileDialog::getOpenFileName(this, tr("فتح ملف"), "", tr("ملف ألف (*.alif);;All Files (*)"));
+        if (!fileName.isEmpty()) {
+            QFile file(fileName);
+            if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                QTextStream in(&file);
+                editor->setPlainText(in.readAll());
+                file.close();
+                currentFile = fileName;
+                editor->document()->setModified(false);
+            }
+            else {
+                QMessageBox::warning(this, tr("خطأ"), tr("لا يمكن فتح الملف"));
+            }
+        }
+    }
 }
 
-void Spectrum::saveFile() {
+bool Spectrum::saveFile() {
+    if (currentFile.isEmpty()) {
+        saveFileAs();
+        return true;
+    }
+    else {
+        QFile file(currentFile);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
+            out << editor->toPlainText();
+            file.close();
+            editor->document()->setModified(false);
+        }
+        else {
+            QMessageBox::warning(this, tr("خطأ"), tr("لا يمكن حفظ الملف"));
+            return false;
+        }
+    }
+    return false;
+}
 
+
+void Spectrum::saveFileAs() {
+    QString fileName = QFileDialog::getSaveFileName(this, tr("حفظ الملف"), "", tr("ملف ألف (*.alif);;All Files (*)"));
+    if (!fileName.isEmpty()) {
+        QFile file(fileName);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
+            out << editor->toPlainText();
+            file.close();
+            currentFile = fileName;
+            editor->document()->setModified(false);
+        }
+        else {
+            QMessageBox::warning(this, tr("خطأ"), tr("لا يمكن حفظ الملف"));
+        }
+    }
+}
+
+
+bool Spectrum::maybeSave() {
+    if (editor->document()->isModified()) {
+        QMessageBox::StandardButton ret;
+        ret = QMessageBox::warning(this, tr("ألف"),
+            tr("تم التعديل على الملف.\n"
+                "هل تريد حفظ التغييرات؟"),
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        if (ret == QMessageBox::Save) {
+            return Spectrum::saveFile();
+        }
+        else if (ret == QMessageBox::Cancel) {
+            return false;
+        }
+    }
+    return true;
 }

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "SyntaxHighlighter.h"
 #include <QtWidgets/QMainWindow>
 
 class Spectrum : public QMainWindow
@@ -12,11 +12,13 @@ public:
 
 private:
     QMenuBar* menu{};
+    SyntaxHighlighter* editor{};
+    QString currentFile{};
 
 private slots:
     void newFile();
     void openFile();
-    void saveFile();
-
-
+    bool saveFile();
+    void saveFileAs();
+    bool maybeSave();
 };

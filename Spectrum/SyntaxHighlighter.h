@@ -9,8 +9,16 @@ class SyntaxHighlighter : public QSyntaxHighlighter {
 
 public:
     explicit SyntaxHighlighter(QTextDocument* parent = nullptr);
+    
+    
+    enum HighlightState {
+        NormalState = -1,
+        StringState,
+        CommentState
+    };
 
-    void addHighlightingRule(const QString& pattern, const QTextCharFormat& format);
+    void addHighlightingRule(const QString& pattern, const QTextCharFormat& format, HighlightState state);
+
 
 protected:
     void highlightBlock(const QString& text) override;
@@ -19,6 +27,7 @@ private:
     struct HighlightingRule {
         QRegularExpression pattern;
         QTextCharFormat format;
+        HighlightState state;
     };
     QVector<HighlightingRule> highlightingRules;
 };

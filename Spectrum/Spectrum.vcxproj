@@ -68,12 +68,18 @@
       <Root>
       </Root>
     </QtRcc>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\Source\TextEditor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <QtRcc>
       <Root>
       </Root>
     </QtRcc>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\Source\TextEditor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -104,21 +110,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="SyntaxHighlighter.cpp">
+    <QtMoc Include="Spectrum.h" />
+    <ClCompile Include="..\Source\TextEditor\AlifEditor.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
     </ClCompile>
-    <QtMoc Include="Spectrum.h" />
+    <ClCompile Include="..\Source\TextEditor\SyntaxHighlighter.cpp" />
     <ClCompile Include="Spectrum.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="SyntaxHighlighter.h" />
+    <QtRcc Include="..\Resources\Spectrum.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="..\Resources\Spectrum.qrc" />
+    <QtMoc Include="..\Source\TextEditor\AlifEditor.h" />
+    <QtMoc Include="..\Source\TextEditor\SyntaxHighlighter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

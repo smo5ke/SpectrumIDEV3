@@ -29,19 +29,23 @@
     <ClCompile Include="Spectrum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <QtMoc Include="..\Source\TextEditor\SyntaxHighlighter.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\Source\TextEditor\AlifEditor.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SyntaxHighlighter.cpp">
+    <ClCompile Include="..\Source\TextEditor\SyntaxHighlighter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="SyntaxHighlighter.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
+    <ClCompile Include="..\Source\TextEditor\AlifEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="..\Resources\Spectrum.qrc">

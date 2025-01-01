@@ -1,5 +1,5 @@
 #pragma once
-#include "SyntaxHighlighter.h"
+#include "AlifEditor.h"
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QTextEdit>
 
@@ -13,12 +13,8 @@ public:
 
 private:
     QMenuBar* menu{};
-    //SyntaxHighlighter* editor{};
-    QTextEdit* editor{};
-    SyntaxHighlighter* highlighter{};
+    AlifEditor* editor{};
     QString currentFile{};
-
-    void setupHighlighter();
 
 private slots:
     void newFile();

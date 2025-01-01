@@ -20,7 +20,7 @@ void SyntaxHighlighter::highlight_text() {
     settingFormat = true;
 
     QTextCursor cursor(document());
-    //cursor.movePosition(QTextCursor::Start);
+    cursor.movePosition(QTextCursor::Start);
     QTextCharFormat keywordFormat{};
     keywordFormat.setForeground(QColor("#00d6e8"));
     QTextCharFormat identifierFormat{};

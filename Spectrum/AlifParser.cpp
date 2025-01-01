@@ -26,9 +26,6 @@ QVector<QPair<QString, TokenType>> AlifParser::tokenize(const QString& text) {
         if (!currentToken.isEmpty()) {
             tokens.append(qMakePair(currentToken, currentType));
         }
-        else {
-            tokens.append(qMakePair(currentToken, currentType));
-        }
         currentToken.clear();
         currentType = TokenType::Other;
     }

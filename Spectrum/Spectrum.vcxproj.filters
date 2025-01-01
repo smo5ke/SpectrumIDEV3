@@ -23,9 +23,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="Spectrum.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
     <QtMoc Include="Spectrum.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -53,5 +50,10 @@
     <QtMoc Include="SyntaxHighlighter.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="..\Resources\Spectrum.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>

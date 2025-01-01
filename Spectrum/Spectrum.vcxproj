@@ -63,6 +63,18 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <QtRcc>
+      <Root>
+      </Root>
+    </QtRcc>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <QtRcc>
+      <Root>
+      </Root>
+    </QtRcc>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -93,7 +105,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="SyntaxHighlighter.cpp" />
-    <QtRcc Include="Spectrum.qrc" />
     <QtMoc Include="Spectrum.h" />
     <ClCompile Include="AlifParser.cpp" />
     <ClCompile Include="Spectrum.cpp" />
@@ -102,6 +113,9 @@
   <ItemGroup>
     <ClInclude Include="AlifParser.h" />
     <QtMoc Include="SyntaxHighlighter.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="..\Resources\Spectrum.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

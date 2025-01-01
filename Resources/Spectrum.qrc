@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/.."/>
+    <qresource prefix="/Resources">
+        <file>TaifLogo.ico</file>
+    </qresource>
+</RCC>

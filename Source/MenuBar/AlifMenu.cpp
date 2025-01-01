@@ -2,6 +2,7 @@
 
 #include <qmessagebox.h>
 #include <qfiledialog.h>
+#include <qshortcut.h>
 
 AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr) {
 
@@ -23,6 +24,10 @@ AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr) {
 
 
 
+
+    // Create a shortcut for Ctrl+S
+    QShortcut* saveShortcut = new QShortcut(QKeySequence::Save, parent);
+    connect(saveShortcut, &QShortcut::activated, this, &AlifMenuBar::saveFile);
 
 
 
@@ -82,6 +87,7 @@ bool AlifMenuBar::saveFile() {
     }
     return false;
 }
+
 
 
 void AlifMenuBar::saveFileAs() {

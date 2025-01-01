@@ -9,7 +9,7 @@ Spectrum::Spectrum(QWidget *parent)
 {
     this->setWindowTitle(" Spectrum V3 - Alif5 Editor");
     QScreen* screenSize = QGuiApplication::primaryScreen();
-    this->setGeometry(screenSize->size().width() / 4, screenSize->size().height() / 4, 800, 400);
+    this->setGeometry(screenSize->size().width() / 4, screenSize->size().height() / 4, 600, 400);
 
     QWidget* center = new QWidget(this);
     QVBoxLayout* vlay = new QVBoxLayout(center);

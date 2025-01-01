@@ -1,21 +1,25 @@
 #pragma once
 
-#include "AlifParser.h"
-#include <QTextEdit>
+#include <QSyntaxHighlighter>
+#include <QTextCharFormat>
+#include <QRegularExpression>
 
-
-
-
-class SyntaxHighlighter : public QTextEdit {
+class SyntaxHighlighter : public QSyntaxHighlighter {
     Q_OBJECT
 
 public:
-    SyntaxHighlighter(QWidget* parent = nullptr);
+    explicit SyntaxHighlighter(QTextDocument* parent = nullptr);
+
+    void addHighlightingRule(const QString& pattern, const QTextCharFormat& format);
 
 protected:
-    void keyPressEvent(QKeyEvent* event) override;
+    void highlightBlock(const QString& text) override;
 
 private:
-    AlifParser parser{};
-    void highlight_text();
+    struct HighlightingRule {
+        QRegularExpression pattern;
+        QTextCharFormat format;
+    };
+    QVector<HighlightingRule> highlightingRules;
 };
+

@@ -104,14 +104,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="SyntaxHighlighter.cpp" />
+    <ClCompile Include="SyntaxHighlighter.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <QtMoc Include="Spectrum.h" />
-    <ClCompile Include="AlifParser.cpp" />
     <ClCompile Include="Spectrum.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AlifParser.h" />
     <QtMoc Include="SyntaxHighlighter.h" />
   </ItemGroup>
   <ItemGroup>

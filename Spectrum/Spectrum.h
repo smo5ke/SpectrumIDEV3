@@ -1,6 +1,7 @@
 #pragma once
 #include "SyntaxHighlighter.h"
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QTextEdit>
 
 class Spectrum : public QMainWindow
 {
@@ -12,8 +13,12 @@ public:
 
 private:
     QMenuBar* menu{};
-    SyntaxHighlighter* editor{};
+    //SyntaxHighlighter* editor{};
+    QTextEdit* editor{};
+    SyntaxHighlighter* highlighter{};
     QString currentFile{};
+
+    void setupHighlighter();
 
 private slots:
     void newFile();

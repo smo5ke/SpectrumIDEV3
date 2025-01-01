@@ -1,13 +1,10 @@
 #include "Spectrum.h"
 #include "SyntaxHighlighter.h"
 
-#include <QTextEdit>
 #include <QVBoxLayout>
-#include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QGuiApplication>
 #include <QScreen>
 
 
@@ -41,9 +38,11 @@ Spectrum::Spectrum(QWidget *parent)
 
 
 
-    editor = new SyntaxHighlighter(center);
+    //editor = new SyntaxHighlighter(center);
+    editor = new QTextEdit(center);
     editor->setTabStopDistance(32);
-    editor->setStyleSheet("QTextEdit { background-color: #151729; color: #ffffff; }");
+    editor->setAcceptRichText(true);
+    editor->setStyleSheet("QTextEdit { background-color: #151729; color: #ffffff;}");
     editor->setFont(QFont("Tajawal", 12, 500));
 
     // set "force" cursor and text direction from right to left
@@ -52,7 +51,8 @@ Spectrum::Spectrum(QWidget *parent)
     option.setTextDirection(Qt::RightToLeft);
     document->setDefaultTextOption(option);
 
-
+    highlighter = new SyntaxHighlighter(editor->document());
+    setupHighlighter();
 
 
     
@@ -155,4 +155,40 @@ bool Spectrum::maybeSave() {
         }
     }
     return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+void Spectrum::setupHighlighter() {
+    // Example highlighting rules
+    QTextCharFormat keywordFormat;
+    keywordFormat.setForeground(QColor("#00d6e8"));
+    highlighter->addHighlightingRule("(?<!\w)(اذا|بينما|لاجل|في)(?!\w)", keywordFormat);
+
+    QTextCharFormat stringFormat;
+    stringFormat.setForeground(Qt::green);
+    highlighter->addHighlightingRule("\".*\"", stringFormat);
+
+    QTextCharFormat commentFormat;
+    commentFormat.setForeground(Qt::gray);
+    highlighter->addHighlightingRule("#.*", commentFormat);
+
+
+    QTextCharFormat formattedContentFormat;
+    formattedContentFormat.setForeground(Qt::white); // White content inside braces
+    highlighter->addHighlightingRule("\{(.*?)\}", formattedContentFormat);
+
+    QTextCharFormat formattedBraceFormat;
+    formattedBraceFormat.setForeground(QColor(255, 165, 0)); // Orange braces
+    highlighter->addHighlightingRule("(\{)", formattedBraceFormat);
+    highlighter->addHighlightingRule("(\})", formattedBraceFormat);
 }

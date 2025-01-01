@@ -2,9 +2,6 @@
 
 
 
-
-
-
 AlifEditor::AlifEditor(QWidget* parent) {
 
     this->setTabStopDistance(32);
@@ -19,19 +16,9 @@ AlifEditor::AlifEditor(QWidget* parent) {
     document->setDefaultTextOption(option);
 
 
-
     highlighter = new SyntaxHighlighter(document);
     setupHighlighter();
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -56,15 +43,14 @@ void AlifEditor::setupHighlighter() {
 
     QTextCharFormat formattedContentFormat;
     formattedContentFormat.setForeground(Qt::white); // White content inside braces
-    highlighter->addHighlightingRule("\{(.*?)\}", formattedContentFormat, SyntaxHighlighter::NormalState);
+    highlighter->addHighlightingRule("{(.*?)}", formattedContentFormat, SyntaxHighlighter::NormalState);
 
     QTextCharFormat formattedBraceFormat;
     formattedBraceFormat.setForeground(QColor("#3985e0")); // curly braces
-    highlighter->addHighlightingRule("(\{)", formattedBraceFormat, SyntaxHighlighter::NormalState);
-    highlighter->addHighlightingRule("(\})", formattedBraceFormat, SyntaxHighlighter::NormalState);
+    highlighter->addHighlightingRule("({)", formattedBraceFormat, SyntaxHighlighter::NormalState);
+    highlighter->addHighlightingRule("(})", formattedBraceFormat, SyntaxHighlighter::NormalState);
 
     QTextCharFormat commentFormat;
     commentFormat.setForeground(Qt::gray);
     highlighter->addHighlightingRule("#.*", commentFormat, SyntaxHighlighter::CommentState);
-
 }

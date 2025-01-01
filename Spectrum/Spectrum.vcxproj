@@ -69,7 +69,7 @@
       </Root>
     </QtRcc>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\Source\TextEditor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -78,7 +78,7 @@
       </Root>
     </QtRcc>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\Source\TextEditor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -111,6 +111,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtMoc Include="Spectrum.h" />
+    <ClCompile Include="..\Source\MenuBar\AlifMenu.cpp" />
     <ClCompile Include="..\Source\TextEditor\AlifEditor.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
@@ -127,6 +128,9 @@
   <ItemGroup>
     <QtMoc Include="..\Source\TextEditor\AlifEditor.h" />
     <QtMoc Include="..\Source\TextEditor\SyntaxHighlighter.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\Source\MenuBar\AlifMenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -1,8 +1,7 @@
 #include "Syntaxhighlighter.h"
 
-#include <QTextCursor>
+#include <qtextcursor.h>
 #include <QTextCharFormat>
-#include <QKeyEvent>
 
 
 SyntaxHighlighter::SyntaxHighlighter(QTextDocument* parent)

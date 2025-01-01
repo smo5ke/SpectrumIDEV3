@@ -1,7 +1,9 @@
 #pragma once
+
+#include "AlifMenu.h"
 #include "AlifEditor.h"
-#include <QtWidgets/QMainWindow>
-#include <QtWidgets/QTextEdit>
+
+#include <QMainWindow>
 
 class Spectrum : public QMainWindow
 {
@@ -12,14 +14,6 @@ public:
     ~Spectrum();
 
 private:
-    QMenuBar* menu{};
+    AlifMenuBar* menu{};
     AlifEditor* editor{};
-    QString currentFile{};
-
-private slots:
-    void newFile();
-    void openFile();
-    bool saveFile();
-    void saveFileAs();
-    bool maybeSave();
 };

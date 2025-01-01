@@ -7,7 +7,6 @@
 
 
 
-
 class AlifEditor : public QTextEdit {
 	Q_OBJECT
 

@@ -1,6 +1,7 @@
 #include "AlifTerminal.h"
 
 #include <qdockwidget.h>
+#include <QTextBlock>
 #include <QKeyEvent>
 #include <QDebug>
 
@@ -47,6 +48,7 @@ Terminal::Terminal(QWidget* parent) : QDockWidget(parent), currentHistoryIndex(-
 
     // Install event filter to intercept key events
     terminalDisplay->installEventFilter(this);
+    terminalDisplay->viewport()->installEventFilter(this);
 }
 
 bool Terminal::eventFilter(QObject* obj, QEvent* event) {
@@ -63,8 +65,15 @@ bool Terminal::eventFilter(QObject* obj, QEvent* event) {
             return true;
         }
 
+        else if (keyEvent->key() == Qt::Key_Left) {
+            QTextCursor cursor = terminalDisplay->textCursor();
+            if (cursor.position() <= commandStartPosition) {
+                return true;  // Block left arrow
+            }
+        }
+
         // Existing Enter key handling
-        if (keyEvent->key() == Qt::Key_Return &&
+        if (keyEvent->key() == Qt::Key_Enter or keyEvent->key() == Qt::Key_Return and
             !(keyEvent->modifiers() & Qt::ControlModifier)) {
 
             // Get the current cursor and text
@@ -107,6 +116,48 @@ bool Terminal::eventFilter(QObject* obj, QEvent* event) {
             }
         }
     }
+
+    // Add mouse press event handling
+    if (obj == terminalDisplay->viewport() && event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+
+        if (mouseEvent->button() == Qt::LeftButton) {
+            // Get the click position relative to the viewport
+            QPoint clickPos = mouseEvent->pos();
+
+            // Get the document layout
+            QTextDocument* doc = terminalDisplay->document();
+            QTextCursor cursor = terminalDisplay->cursorForPosition(clickPos);
+
+            // Get the clicked line number
+            QTextBlock clickedBlock = doc->findBlockByLineNumber(cursor.blockNumber());
+
+            // Get the last line of the document
+            QTextBlock lastBlock = doc->lastBlock();
+
+            // Create a new cursor for the last line
+            QTextCursor lastLineCursor(lastBlock);
+
+            // Calculate the column position
+            int clickColumn = cursor.positionInBlock();
+
+            // Position the cursor at the same column in the last line
+            lastLineCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor,
+                qMin(clickColumn, lastBlock.length() - 1));
+
+            // Ensure cursor is not before the command start position
+            if (lastLineCursor.position() < commandStartPosition) {
+                lastLineCursor.setPosition(commandStartPosition);
+            }
+
+            // Set the cursor
+            terminalDisplay->setTextCursor(lastLineCursor);
+
+            // Stop event propagation
+            return true;
+        }
+    }
+
     return QWidget::eventFilter(obj, event);
 }
 
@@ -171,9 +222,8 @@ void Terminal::insertPrompt(bool initial) {
     }
 
     // Insert path prompt
-    terminalDisplay->setTextColor(QColor("lightblue"));
-    terminalDisplay->insertPlainText(QString("%1> ").arg(currentPath));
     terminalDisplay->setTextColor(QColor("white"));
+    terminalDisplay->insertPlainText(QString("%1> ").arg(currentPath));
 
     // Remember the start position of command input
     commandStartPosition = terminalDisplay->textCursor().position();

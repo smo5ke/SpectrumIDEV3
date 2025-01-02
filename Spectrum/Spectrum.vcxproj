@@ -69,7 +69,7 @@
       </Root>
     </QtRcc>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -78,7 +78,7 @@
       </Root>
     </QtRcc>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -112,6 +112,12 @@
   <ItemGroup>
     <QtMoc Include="Spectrum.h" />
     <ClCompile Include="..\Source\MenuBar\AlifMenu.cpp" />
+    <ClCompile Include="..\Source\Terminal\AlifTerminal.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <ClCompile Include="..\Source\TextEditor\AlifEditor.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
@@ -131,6 +137,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="..\Source\MenuBar\AlifMenu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\Source\Terminal\AlifTerminal.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

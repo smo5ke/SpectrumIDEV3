@@ -6,7 +6,7 @@ AlifEditor::AlifEditor(QWidget* parent) {
 
     this->setTabStopDistance(32);
     this->setAcceptRichText(true);
-    this->setStyleSheet("QTextEdit { background-color: #151729; color: #ffffff;}");
+    this->setStyleSheet("QTextEdit { background-color: #151729; color: #dddddd;}");
     this->setFont(QFont("Tajawal", 12, 500));
 
     // set "force" cursor and text direction from right to left

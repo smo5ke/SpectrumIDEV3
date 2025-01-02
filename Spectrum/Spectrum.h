@@ -2,6 +2,7 @@
 
 #include "AlifMenu.h"
 #include "AlifEditor.h"
+#include "AlifTerminal.h"
 
 #include <QMainWindow>
 
@@ -16,4 +17,5 @@ public:
 private:
     AlifMenuBar* menu{};
     AlifEditor* editor{};
+    Terminal* terminal{};
 };

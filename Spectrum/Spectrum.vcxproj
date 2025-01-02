@@ -69,7 +69,7 @@
       </Root>
     </QtRcc>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;..\Source\FoldersTree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -78,7 +78,7 @@
       </Root>
     </QtRcc>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;..\Source\FoldersTree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -111,6 +111,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtMoc Include="Spectrum.h" />
+    <ClCompile Include="..\Source\FoldersTree\AlifFolders.cpp" />
     <ClCompile Include="..\Source\MenuBar\AlifMenu.cpp" />
     <ClCompile Include="..\Source\Terminal\AlifTerminal.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
@@ -140,6 +141,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="..\Source\Terminal\AlifTerminal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\Source\FoldersTree\AlifFolders.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

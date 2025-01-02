@@ -3,8 +3,10 @@
 #include "AlifMenu.h"
 #include "AlifEditor.h"
 #include "AlifTerminal.h"
+#include "AlifFolders.h"
 
 #include <QMainWindow>
+
 
 class Spectrum : public QMainWindow
 {
@@ -18,4 +20,5 @@ private:
     AlifMenuBar* menu{};
     AlifEditor* editor{};
     Terminal* terminal{};
+    FolderTree* folderTree{};
 };

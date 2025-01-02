@@ -9,17 +9,31 @@ AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr) {
     editorRef = editorPtr;
 
     QMenu* fileMenu = parent->addMenu("ملف");
+    QMenu* editMenu = parent->addMenu("تحرير");
+    QMenu* runMenu = parent->addMenu("تشغيل");
+    QMenu* helpMenu = parent->addMenu("مساعدة");
 
     QAction* newAction = new QAction("جديد", parent);
     QAction* openAction = new QAction("فتح", parent);
     QAction* saveAction = new QAction("حفظ", parent);
     QAction* saveAsAction = new QAction("حفظ باسم", parent);
+    QAction* optionsAction = new QAction("خيارات", parent);
+    QAction* exitAction = new QAction("خروج", parent);
+
+    QAction* aboutAction = new QAction("عن المحرر", parent);
+
+
 
     fileMenu->addAction(newAction);
     fileMenu->addAction(openAction);
-    //fileMenu->addSeparator();
     fileMenu->addAction(saveAction);
     fileMenu->addAction(saveAsAction);
+    fileMenu->addSeparator();
+    fileMenu->addAction(optionsAction);
+    fileMenu->addAction(exitAction);
+
+    helpMenu->addAction(aboutAction);
+
 
 
 

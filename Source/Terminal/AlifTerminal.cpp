@@ -3,6 +3,7 @@
 #include <qdockwidget.h>
 #include <QTextBlock>
 #include <QKeyEvent>
+//#include <QApplication>
 #include <QDebug>
 
 Terminal::Terminal(QWidget* parent)
@@ -42,23 +43,17 @@ Terminal::Terminal(QWidget* parent)
     // Install event filters
     terminalDisplay->installEventFilter(this);
     terminalDisplay->viewport()->installEventFilter(this);
-
-    setupConnections();
 }
 
 void Terminal::setupTerminalDisplay() {
     terminalDisplay->setReadOnly(false);
     terminalDisplay->setStyleSheet(R"(
         QPlainTextEdit {
-            background-color: black;
+            background-color: #151729;
             color: white;
             font-family: Consolas, monospace;
         }
     )");
-}
-
-void Terminal::setupConnections() {
-    // Any additional signal-slot connections can be added here if needed
 }
 
 bool Terminal::eventFilter(QObject* obj, QEvent* event) {
@@ -128,23 +123,42 @@ bool Terminal::eventFilter(QObject* obj, QEvent* event) {
     }
 
     // Mouse click handling
-    if (obj == terminalDisplay->viewport() and event->type() == QEvent::MouseButtonPress) {
+    if (obj == terminalDisplay->viewport()) {
         QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 
-        if (mouseEvent->button() == Qt::LeftButton) {
+        if (event->type() == QEvent::MouseButtonPress && mouseEvent->button() == Qt::LeftButton) {
             QTextCursor cursor = terminalDisplay->cursorForPosition(mouseEvent->pos());
 
-            // Restrict cursor movement
+            // Prevent cursor movement before the command start position
             if (cursor.position() < commandStartPosition) {
-                cursor.setPosition(commandStartPosition);
+                // Instead of just setting cursor position, restore it to the last valid position
+                cursor.setPosition(std::max(cursor.position(), commandStartPosition));
                 terminalDisplay->setTextCursor(cursor);
+
+                 //QApplication::beep() ; // an audible feedback
+
                 return true;
             }
+        }
+        else if (event->type() == QEvent::MouseButtonDblClick && mouseEvent->button() == Qt::LeftButton) {
+            QTextCursor cursor = terminalDisplay->cursorForPosition(mouseEvent->pos());
+
+            // On double-click, move to end of line, but respect commandStartPosition
+            cursor.movePosition(QTextCursor::EndOfLine);
+
+            // Ensure cursor doesn't go before commandStartPosition
+            if (cursor.position() < commandStartPosition) {
+                cursor.setPosition(commandStartPosition);
+            }
+
+            terminalDisplay->setTextCursor(cursor);
+            return true;
         }
     }
 
     return QWidget::eventFilter(obj, event);
 }
+
 
 void Terminal::executeCommand(const QString& command) {
     QString program;

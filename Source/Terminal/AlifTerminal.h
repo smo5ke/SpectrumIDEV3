@@ -25,7 +25,6 @@ private:
     int commandStartPosition;
 
     void setupTerminalDisplay();
-    void setupConnections();
     void executeCommand(const QString& command);
     void insertPrompt(bool initial = false);
     void handleCdCommand(const QString& path);

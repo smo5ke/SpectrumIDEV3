@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QVBoxLayout>
 #include <qdockwidget.h>
+#include <qplaintextedit.h>
 
 class Terminal : public QDockWidget {
     Q_OBJECT
@@ -17,16 +18,18 @@ protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
 
 private:
-    QTextEdit* terminalDisplay;
+    QPlainTextEdit* terminalDisplay;
+    QStringList commandHistory;
+    int currentHistoryIndex;
     QString currentPath;
     int commandStartPosition;
 
-    QStringList commandHistory;
-    int currentHistoryIndex;
-
+    void setupTerminalDisplay();
+    void setupConnections();
     void executeCommand(const QString& command);
-    void handleCdCommand(const QString& path);
     void insertPrompt(bool initial = false);
-
+    void handleCdCommand(const QString& path);
     void navigateCommandHistory(bool previous);
+    void setTextColor(const QColor& color, QTextCursor* cursor);
+    void appendColoredText(const QString& text, const QColor& color);
 };

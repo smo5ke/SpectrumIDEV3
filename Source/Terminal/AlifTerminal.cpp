@@ -5,57 +5,67 @@
 #include <QKeyEvent>
 #include <QDebug>
 
-Terminal::Terminal(QWidget* parent) : QDockWidget(parent), currentHistoryIndex(-1) {
-
-    setWindowTitle("طرفية ألف");
+Terminal::Terminal(QWidget* parent)
+    : QDockWidget(parent),
+    currentHistoryIndex(-1),
+    commandStartPosition(0)
+{
+    setWindowTitle("الطرفية");
+    setFont(QFont("Tajawal"));
     setStyleSheet(R"(
         QDockWidget {
-            /*color: #ffffff;*/
             border: none;
         }
         QDockWidget::title {
-            /*background-color: #262836;*/
             text-align: center;
             border: none;
         }
     )");
 
-    setFeatures(QDockWidget::DockWidgetMovable |
-        QDockWidget::DockWidgetClosable);
+    setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable);
 
     // Create terminal display
-    terminalDisplay = new QTextEdit(this);
-    terminalDisplay->setReadOnly(false);
-    terminalDisplay->setStyleSheet(R"(
-        QTextEdit {
-            background-color: black;
-            color: white;
-            font-family: Consolas, monospace;
-        }
-    )");
+    terminalDisplay = new QPlainTextEdit(this);
+    setupTerminalDisplay();
 
     QWidget* dockContent = new QWidget(this);
-
     QVBoxLayout* vlayTerminal = new QVBoxLayout(dockContent);
     vlayTerminal->setContentsMargins(0, 0, 0, 0);
     vlayTerminal->addWidget(terminalDisplay);
 
     setWidget(dockContent);
 
-    // Set initial path
+    // Set initial path and prompt
     currentPath = QDir::currentPath();
     insertPrompt(true);
 
-    // Install event filter to intercept key events
+    // Install event filters
     terminalDisplay->installEventFilter(this);
     terminalDisplay->viewport()->installEventFilter(this);
+
+    setupConnections();
+}
+
+void Terminal::setupTerminalDisplay() {
+    terminalDisplay->setReadOnly(false);
+    terminalDisplay->setStyleSheet(R"(
+        QPlainTextEdit {
+            background-color: black;
+            color: white;
+            font-family: Consolas, monospace;
+        }
+    )");
+}
+
+void Terminal::setupConnections() {
+    // Any additional signal-slot connections can be added here if needed
 }
 
 bool Terminal::eventFilter(QObject* obj, QEvent* event) {
-    if (obj == terminalDisplay && event->type() == QEvent::KeyPress) {
+    if (obj == terminalDisplay and event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
-        // Handle Up and Down Arrow for command history
+        // Command history navigation
         if (keyEvent->key() == Qt::Key_Up) {
             navigateCommandHistory(true);
             return true;
@@ -65,6 +75,7 @@ bool Terminal::eventFilter(QObject* obj, QEvent* event) {
             return true;
         }
 
+        // Cursor movement restrictions
         else if (keyEvent->key() == Qt::Key_Left) {
             QTextCursor cursor = terminalDisplay->textCursor();
             if (cursor.position() <= commandStartPosition) {
@@ -72,11 +83,10 @@ bool Terminal::eventFilter(QObject* obj, QEvent* event) {
             }
         }
 
-        // Existing Enter key handling
-        if (keyEvent->key() == Qt::Key_Enter or keyEvent->key() == Qt::Key_Return and
+        // Enter key handling
+        if ((keyEvent->key() == Qt::Key_Enter or keyEvent->key() == Qt::Key_Return) and
             !(keyEvent->modifiers() & Qt::ControlModifier)) {
 
-            // Get the current cursor and text
             QTextCursor cursor = terminalDisplay->textCursor();
             cursor.setPosition(commandStartPosition);
             cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
@@ -84,77 +94,52 @@ bool Terminal::eventFilter(QObject* obj, QEvent* event) {
 
             // Store non-empty commands in history
             if (!command.isEmpty()) {
-                // Avoid duplicate entries
-                if (commandHistory.isEmpty() || commandHistory.last() != command) {
+                if (commandHistory.isEmpty() or commandHistory.last() != command) {
                     commandHistory.append(command);
                 }
-                // Reset history index
                 currentHistoryIndex = -1;
             }
 
-            // Handle cd command separately
+            // Handle special commands
             if (command.startsWith("cd ")) {
                 handleCdCommand(command.mid(3).trimmed());
-                return true;  // Event handled
+                return true;
             }
 
-            // Execute the command
+            // Execute command
             if (!command.isEmpty()) {
                 executeCommand(command);
-                return true;  // Event handled
+                return true;
             }
 
-            // If empty command, just insert a new prompt
+            // Empty command
             insertPrompt();
-            return true;  // Event handled
+            return true;
         }
-        // Existing backspace handling
+
+        // Backspace handling
         else if (keyEvent->key() == Qt::Key_Backspace) {
             QTextCursor cursor = terminalDisplay->textCursor();
             if (cursor.position() <= commandStartPosition) {
                 return true;  // Block backspace
             }
         }
+
     }
 
-    // Add mouse press event handling
-    if (obj == terminalDisplay->viewport() && event->type() == QEvent::MouseButtonPress) {
+    // Mouse click handling
+    if (obj == terminalDisplay->viewport() and event->type() == QEvent::MouseButtonPress) {
         QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 
         if (mouseEvent->button() == Qt::LeftButton) {
-            // Get the click position relative to the viewport
-            QPoint clickPos = mouseEvent->pos();
+            QTextCursor cursor = terminalDisplay->cursorForPosition(mouseEvent->pos());
 
-            // Get the document layout
-            QTextDocument* doc = terminalDisplay->document();
-            QTextCursor cursor = terminalDisplay->cursorForPosition(clickPos);
-
-            // Get the clicked line number
-            QTextBlock clickedBlock = doc->findBlockByLineNumber(cursor.blockNumber());
-
-            // Get the last line of the document
-            QTextBlock lastBlock = doc->lastBlock();
-
-            // Create a new cursor for the last line
-            QTextCursor lastLineCursor(lastBlock);
-
-            // Calculate the column position
-            int clickColumn = cursor.positionInBlock();
-
-            // Position the cursor at the same column in the last line
-            lastLineCursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor,
-                qMin(clickColumn, lastBlock.length() - 1));
-
-            // Ensure cursor is not before the command start position
-            if (lastLineCursor.position() < commandStartPosition) {
-                lastLineCursor.setPosition(commandStartPosition);
+            // Restrict cursor movement
+            if (cursor.position() < commandStartPosition) {
+                cursor.setPosition(commandStartPosition);
+                terminalDisplay->setTextCursor(cursor);
+                return true;
             }
-
-            // Set the cursor
-            terminalDisplay->setTextCursor(lastLineCursor);
-
-            // Stop event propagation
-            return true;
         }
     }
 
@@ -162,7 +147,6 @@ bool Terminal::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void Terminal::executeCommand(const QString& command) {
-    // Prepare command execution
     QString program;
     QStringList arguments;
 
@@ -174,121 +158,107 @@ void Terminal::executeCommand(const QString& command) {
     arguments << "-c" << command;
 #endif
 
-    // Create a new QProcess for each command
     QProcess* process = new QProcess(this);
     process->setWorkingDirectory(currentPath);
 
-    // Connect signals to handle output
     connect(process, &QProcess::readyReadStandardOutput, this, [this, process]() {
         QByteArray output = process->readAllStandardOutput();
-        terminalDisplay->moveCursor(QTextCursor::End);
-        terminalDisplay->insertPlainText("\n" + QString::fromLocal8Bit(output));
-        terminalDisplay->ensureCursorVisible();
+        appendColoredText("\n" + QString::fromLocal8Bit(output), Qt::white);
         });
 
     connect(process, &QProcess::readyReadStandardError, this, [this, process]() {
         QByteArray error = process->readAllStandardError();
-        terminalDisplay->moveCursor(QTextCursor::End);
-        terminalDisplay->setTextColor(QColor("red"));
-        terminalDisplay->insertPlainText("\n" + QString::fromLocal8Bit(error));
-        terminalDisplay->setTextColor(QColor("white"));
-        terminalDisplay->ensureCursorVisible();
+        appendColoredText("\n" + QString::fromLocal8Bit(error), Qt::red);
         });
 
     connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
         this, [this, process](int exitCode, QProcess::ExitStatus exitStatus) {
             if (exitStatus == QProcess::CrashExit) {
-                terminalDisplay->moveCursor(QTextCursor::End);
-                terminalDisplay->setTextColor(QColor("red"));
-                terminalDisplay->insertPlainText("\nProcess crashed\n");
-                terminalDisplay->setTextColor(QColor("white"));
+                appendColoredText("\nProcess crashed\n", Qt::red);
             }
             process->deleteLater();
             insertPrompt();
         }
     );
 
-    // Start the process
     process->start(program, arguments);
 }
 
 void Terminal::insertPrompt(bool initial) {
-    // Move cursor to end
-    terminalDisplay->moveCursor(QTextCursor::End);
+    QTextCursor cursor = terminalDisplay->textCursor();
+    cursor.movePosition(QTextCursor::End);
 
-    // If not initial call, add a newline
     if (!initial) {
-        terminalDisplay->insertPlainText("\n");
+        cursor.insertText("\n");
     }
 
-    // Insert path prompt
-    terminalDisplay->setTextColor(QColor("white"));
-    terminalDisplay->insertPlainText(QString("%1> ").arg(currentPath));
+    setTextColor(Qt::white, &cursor);
+    cursor.insertText(QString("%1> ").arg(currentPath));
 
-    // Remember the start position of command input
-    commandStartPosition = terminalDisplay->textCursor().position();
+    commandStartPosition = cursor.position();
+    terminalDisplay->setTextCursor(cursor);
 }
 
 void Terminal::handleCdCommand(const QString& path) {
-    QString newPath;
-    if (path.startsWith('/') || path.contains(':')) {
-        // Absolute path
-        newPath = path;
-    }
-    else {
-        // Relative path
-        newPath = QDir(currentPath).filePath(path);
-    }
+    QString newPath = path.startsWith('/') or path.contains(':')
+        ? path
+        : QDir(currentPath).filePath(path);
 
     QDir dir(newPath);
     if (dir.exists()) {
         currentPath = QDir::cleanPath(dir.absolutePath());
         QDir::setCurrent(currentPath);
-        terminalDisplay->moveCursor(QTextCursor::End);
-        terminalDisplay->setTextColor(QColor("green"));
-        terminalDisplay->insertPlainText(QString("\nChanged directory to: %1\n").arg(currentPath));
-        terminalDisplay->setTextColor(QColor("white"));
+        appendColoredText(QString("\nChanged directory to: %1\n").arg(currentPath), Qt::green);
     }
     else {
-        terminalDisplay->moveCursor(QTextCursor::End);
-        terminalDisplay->setTextColor(QColor("red"));
-        terminalDisplay->insertPlainText(QString("\nDirectory not found: %1\n").arg(newPath));
-        terminalDisplay->setTextColor(QColor("white"));
+        appendColoredText(QString("\nDirectory not found: %1\n").arg(newPath), Qt::red);
     }
+
     insertPrompt();
 }
 
-
-
 void Terminal::navigateCommandHistory(bool previous) {
-    // If no history exists, do nothing
-    if (commandHistory.isEmpty()) {
-        return;
-    }
+    if (commandHistory.isEmpty()) return;
 
-    // First time navigating history
+    // Determine new history index
     if (currentHistoryIndex == -1) {
-        // Start from the last command if going previous
         currentHistoryIndex = previous ? commandHistory.size() - 1 : 0;
     }
     else {
-        // Navigate through history
-        if (previous) {
-            // Move to previous command, but don't go below 0
-            currentHistoryIndex = qMax(0, currentHistoryIndex - 1);
-        }
-        else {
-            // Move to next command, but don't exceed history size
-            currentHistoryIndex = qMin(commandHistory.size() - 1, currentHistoryIndex + 1);
-        }
+        currentHistoryIndex = previous
+            ? qMax(0, currentHistoryIndex - 1)
+            : qMin(commandHistory.size() - 1, currentHistoryIndex + 1);
     }
 
-    // Remove existing text after prompt
+    // Replace current command
     QTextCursor cursor = terminalDisplay->textCursor();
     cursor.setPosition(commandStartPosition);
     cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     cursor.removeSelectedText();
 
-    // Insert selected history command
-    terminalDisplay->insertPlainText(commandHistory[currentHistoryIndex]);
+    cursor.insertText(commandHistory[currentHistoryIndex]);
 }
+
+void Terminal::setTextColor(const QColor& color, QTextCursor* cursor) {
+    QTextCharFormat format;
+    format.setForeground(color);
+    cursor->mergeCharFormat(format);
+}
+
+void Terminal::appendColoredText(const QString& text, const QColor& color) {
+    QTextCursor cursor = terminalDisplay->textCursor();
+    cursor.movePosition(QTextCursor::End);
+
+    QTextCharFormat colorFormat;
+    colorFormat.setForeground(color);
+
+    cursor.mergeCharFormat(colorFormat);
+    cursor.insertText(text);
+
+    terminalDisplay->setTextCursor(cursor);
+    terminalDisplay->ensureCursorVisible();
+}
+
+
+
+

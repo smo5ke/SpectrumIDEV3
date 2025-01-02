@@ -5,8 +5,9 @@
 #include <QProcess>
 #include <QDir>
 #include <QVBoxLayout>
+#include <qdockwidget.h>
 
-class Terminal : public QWidget {
+class Terminal : public QDockWidget {
     Q_OBJECT
 
 public:

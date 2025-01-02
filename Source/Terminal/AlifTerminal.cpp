@@ -1,8 +1,27 @@
 #include "AlifTerminal.h"
+
+#include <qdockwidget.h>
 #include <QKeyEvent>
 #include <QDebug>
 
-Terminal::Terminal(QWidget* parent) : QWidget(parent) {
+Terminal::Terminal(QWidget* parent) : QDockWidget(parent) {
+
+    setWindowTitle("طرفية ألف");
+    setStyleSheet(R"(
+        QDockWidget {
+            /*color: #ffffff;*/
+            border: none;
+        }
+        QDockWidget::title {
+            /*background-color: #262836;*/
+            text-align: center;
+            border: none;
+        }
+    )");
+
+    setFeatures(QDockWidget::DockWidgetMovable |
+        QDockWidget::DockWidgetClosable);
+
     // Create terminal display
     terminalDisplay = new QTextEdit(this);
     terminalDisplay->setReadOnly(false);
@@ -14,11 +33,13 @@ Terminal::Terminal(QWidget* parent) : QWidget(parent) {
         }
     )");
 
-    // Set layout
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(terminalDisplay);
-    setLayout(layout);
+    QWidget* dockContent = new QWidget(this);
+
+    QVBoxLayout* vlayTerminal = new QVBoxLayout(dockContent);
+    vlayTerminal->setContentsMargins(0, 0, 0, 0);
+    vlayTerminal->addWidget(terminalDisplay);
+
+    setWidget(dockContent);
 
     // Set initial path
     currentPath = QDir::currentPath();

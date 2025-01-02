@@ -1,6 +1,6 @@
 #include "Spectrum.h"
 
-
+#include <qdockwidget.h>
 #include <QVBoxLayout>
 #include <QScreen>
 
@@ -20,13 +20,14 @@ Spectrum::Spectrum(QWidget *parent)
 
     editor = new AlifEditor(center);
     menu = new AlifMenuBar(this->menuBar(), editor);
-    terminal = new Terminal(center);
+    terminal = new Terminal();
 
-    
     
     vlay->addWidget(editor);
     vlay->addWidget(terminal);
 
+
+    addDockWidget(Qt::BottomDockWidgetArea, terminal); // يجب أن تكون بعد vlay->addWidget(terminal)
     this->setCentralWidget(center);
 }
 

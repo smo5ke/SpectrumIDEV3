@@ -21,7 +21,12 @@ private:
     QString currentPath;
     int commandStartPosition;
 
+    QStringList commandHistory;
+    int currentHistoryIndex;
+
     void executeCommand(const QString& command);
     void handleCdCommand(const QString& path);
     void insertPrompt(bool initial = false);
+
+    void navigateCommandHistory(bool previous);
 };

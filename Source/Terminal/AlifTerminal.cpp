@@ -4,7 +4,7 @@
 #include <QKeyEvent>
 #include <QDebug>
 
-Terminal::Terminal(QWidget* parent) : QDockWidget(parent) {
+Terminal::Terminal(QWidget* parent) : QDockWidget(parent), currentHistoryIndex(-1) {
 
     setWindowTitle("طرفية ألف");
     setStyleSheet(R"(
@@ -53,7 +53,17 @@ bool Terminal::eventFilter(QObject* obj, QEvent* event) {
     if (obj == terminalDisplay && event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
-        // Explicitly handle Enter key
+        // Handle Up and Down Arrow for command history
+        if (keyEvent->key() == Qt::Key_Up) {
+            navigateCommandHistory(true);
+            return true;
+        }
+        else if (keyEvent->key() == Qt::Key_Down) {
+            navigateCommandHistory(false);
+            return true;
+        }
+
+        // Existing Enter key handling
         if (keyEvent->key() == Qt::Key_Return &&
             !(keyEvent->modifiers() & Qt::ControlModifier)) {
 
@@ -62,6 +72,16 @@ bool Terminal::eventFilter(QObject* obj, QEvent* event) {
             cursor.setPosition(commandStartPosition);
             cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
             QString command = cursor.selectedText().trimmed();
+
+            // Store non-empty commands in history
+            if (!command.isEmpty()) {
+                // Avoid duplicate entries
+                if (commandHistory.isEmpty() || commandHistory.last() != command) {
+                    commandHistory.append(command);
+                }
+                // Reset history index
+                currentHistoryIndex = -1;
+            }
 
             // Handle cd command separately
             if (command.startsWith("cd ")) {
@@ -79,7 +99,7 @@ bool Terminal::eventFilter(QObject* obj, QEvent* event) {
             insertPrompt();
             return true;  // Event handled
         }
-        // Allow backspace only after prompt position
+        // Existing backspace handling
         else if (keyEvent->key() == Qt::Key_Backspace) {
             QTextCursor cursor = terminalDisplay->textCursor();
             if (cursor.position() <= commandStartPosition) {
@@ -186,4 +206,39 @@ void Terminal::handleCdCommand(const QString& path) {
         terminalDisplay->setTextColor(QColor("white"));
     }
     insertPrompt();
+}
+
+
+
+void Terminal::navigateCommandHistory(bool previous) {
+    // If no history exists, do nothing
+    if (commandHistory.isEmpty()) {
+        return;
+    }
+
+    // First time navigating history
+    if (currentHistoryIndex == -1) {
+        // Start from the last command if going previous
+        currentHistoryIndex = previous ? commandHistory.size() - 1 : 0;
+    }
+    else {
+        // Navigate through history
+        if (previous) {
+            // Move to previous command, but don't go below 0
+            currentHistoryIndex = qMax(0, currentHistoryIndex - 1);
+        }
+        else {
+            // Move to next command, but don't exceed history size
+            currentHistoryIndex = qMin(commandHistory.size() - 1, currentHistoryIndex + 1);
+        }
+    }
+
+    // Remove existing text after prompt
+    QTextCursor cursor = terminalDisplay->textCursor();
+    cursor.setPosition(commandStartPosition);
+    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    cursor.removeSelectedText();
+
+    // Insert selected history command
+    terminalDisplay->insertPlainText(commandHistory[currentHistoryIndex]);
 }

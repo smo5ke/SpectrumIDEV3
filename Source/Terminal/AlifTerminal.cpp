@@ -15,11 +15,17 @@ Terminal::Terminal(QWidget* parent)
     setFont(QFont("Tajawal"));
     setStyleSheet(R"(
         QDockWidget {
+            color: #dddddd;
             border: none;
+            titlebar-close-icon: url(:/Resources/close.png);
         }
         QDockWidget::title {
+            background-color: #1e202e;
             border: none;
-            padding: 0px 5px 0 0;
+            padding: 3px 5px 0 0;
+        }
+        QDockWidget::close-button {
+            icon-size: 10px;
         }
     )");
 
@@ -49,7 +55,7 @@ void Terminal::setupTerminalDisplay() {
     terminalDisplay->setReadOnly(false);
     terminalDisplay->setStyleSheet(R"(
         QPlainTextEdit {
-            background-color: #151729;
+            background-color: #141520;
             color: white;
             font-family: Consolas, monospace;
         }

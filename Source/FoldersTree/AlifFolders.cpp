@@ -8,6 +8,7 @@
 #include <QTextStream>
 #include <QMessageBox>
 #include <qheaderview.h>
+#include <QPainter>
 
 FolderTree::FolderTree(AlifEditor* textEditor, QWidget* parent)
     : QDockWidget(parent), textEditor(textEditor)
@@ -16,28 +17,34 @@ FolderTree::FolderTree(AlifEditor* textEditor, QWidget* parent)
     setFont(QFont("Tajawal"));
     setStyleSheet(R"(
         QDockWidget {
+            color: #dddddd;
             border: none;
+            titlebar-close-icon: url(:/Resources/close.png);
         }
         QDockWidget::title {
+            background-color: #1e202e;
             border: none;
             padding: 3px 5px 0 0;
         }
+        QDockWidget::close-button {
+            icon-size: 10px;
+        }
     )");
-
 
     setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable);
 
     // Create tree view
     treeView = new QTreeView(this);
+    treeView->setStyleSheet(R"(
+        QTreeView {
+            color: white;
+            background-color: #141520;
+            border: none;
+        }
+    )");
 
     // Hide the header (title bar)
     treeView->header()->hide();
-
-    // Set black background for the tree view
-    QPalette palette = treeView->palette();
-    palette.setColor(QPalette::Base, QColor("#151729"));  // Background color
-    palette.setColor(QPalette::Text, Qt::white);
-    treeView->setPalette(palette);
 
     // Create file system model
     fileModel = new QFileSystemModel(this);
@@ -85,7 +92,8 @@ void FolderTree::onFileDoubleClicked(const QModelIndex& index)
     // Check if it's a file (not a directory)
     if (fileInfo.isFile()) {
         // List of text file extensions
-        QStringList textExtensions = { "alif", "txt", "log", "md", "csv", "json", "xml", "html", "css", "js", "cpp", "h", "py" };
+        QStringList textExtensions = { "alif", "txt", "log", "md", "csv",
+            "json", "xml", "html", "css", "js", "cpp", "h", "py" };
 
         QString ext = fileInfo.suffix().toLower();
         if (textExtensions.contains(ext)) {

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "SyntaxHighlighter.h"
-
 #include <qtextedit.h>
 
 
@@ -15,7 +13,7 @@ public:
 
 
 private:
-	SyntaxHighlighter* highlighter{};
+	class SyntaxHighlighter* highlighter{};
 
 	void setupHighlighter();
 

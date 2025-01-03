@@ -1,8 +1,8 @@
 #pragma once
 
-#include "AlifEditor.h"
-
 #include <qmenubar.h>
+#include <qfilesystemmodel.h>
+#include <qtreeview.h>
 
 
 
@@ -10,11 +10,12 @@ class AlifMenuBar : public QMenuBar {
 
 	Q_OBJECT
 public:
-	AlifMenuBar(QMenuBar* parent = nullptr, AlifEditor* editorPtr = nullptr);
+	AlifMenuBar(QMenuBar* parent = nullptr, class AlifEditor* editorPtr = nullptr, class FolderTree* folderTreePtr = nullptr);
 
 
 private:
-    AlifEditor* editorRef{};
+    class AlifEditor* editorRef{};
+    FolderTree* folderTreeRef{};
     QString currentFile{};
 
 private slots:
@@ -23,5 +24,4 @@ private slots:
     bool saveFile();
     void saveFileAs();
     bool maybeSave();
-
 };

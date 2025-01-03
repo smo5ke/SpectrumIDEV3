@@ -1,9 +1,10 @@
 #pragma once
 
-#include "AlifMenu.h"
+#include "AlifFolders.h"
 #include "AlifEditor.h"
 #include "AlifTerminal.h"
-#include "AlifFolders.h"
+#include "SyntaxHighlighter.h"
+#include "AlifMenu.h"
 
 #include <QMainWindow>
 

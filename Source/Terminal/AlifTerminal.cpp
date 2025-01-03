@@ -18,8 +18,8 @@ Terminal::Terminal(QWidget* parent)
             border: none;
         }
         QDockWidget::title {
-            text-align: center;
             border: none;
+            padding: 0px 5px 0 0;
         }
     )");
 

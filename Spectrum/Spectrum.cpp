@@ -19,9 +19,9 @@ Spectrum::Spectrum(QWidget *parent)
 
 
     editor = new AlifEditor(center);
-    menu = new AlifMenuBar(this->menuBar(), editor);
     terminal = new Terminal(this);
     folderTree = new FolderTree(editor, this);
+    menu = new AlifMenuBar(this->menuBar(), editor, folderTree);
 
     
     vlay->addWidget(editor);

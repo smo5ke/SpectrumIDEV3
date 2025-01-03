@@ -1,9 +1,13 @@
+#include "AlifEditor.h"
 #include "AlifFolders.h"
+
 #include <QVBoxLayout>
 #include <QDir>
 #include <QFile>
+#include <qfiledialog.h>
 #include <QTextStream>
 #include <QMessageBox>
+#include <qheaderview.h>
 
 FolderTree::FolderTree(AlifEditor* textEditor, QWidget* parent)
     : QDockWidget(parent), textEditor(textEditor)
@@ -16,19 +20,30 @@ FolderTree::FolderTree(AlifEditor* textEditor, QWidget* parent)
         }
         QDockWidget::title {
             border: none;
+            padding: 3px 5px 0 0;
         }
     )");
+
 
     setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable);
 
     // Create tree view
     treeView = new QTreeView(this);
 
+    // Hide the header (title bar)
+    treeView->header()->hide();
+
+    // Set black background for the tree view
+    QPalette palette = treeView->palette();
+    palette.setColor(QPalette::Base, QColor("#151729"));  // Background color
+    palette.setColor(QPalette::Text, Qt::white);
+    treeView->setPalette(palette);
+
     // Create file system model
     fileModel = new QFileSystemModel(this);
 
     // Set root to the directory of the current application
-    QString projectPath = QDir::currentPath() + "/../..";
+    QString projectPath = QDir::currentPath() + "/..";
     fileModel->setRootPath(projectPath);
 
     // Set the model for the tree view
@@ -101,4 +116,38 @@ void FolderTree::setRootPath(const QString& path)
 {
     // Set the root path for the file system model
     treeView->setRootIndex(fileModel->index(path));
+}
+
+
+
+
+
+void FolderTree::openFolder()
+{
+    // Open folder selection dialog
+    QString selectedFolder = QFileDialog::getExistingDirectory(
+        this,
+        tr("اختر ملف"),
+        projectPath,
+        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+    );
+
+    // Check if a folder was selected
+    if (!selectedFolder.isEmpty()) {
+        // Update project path
+        projectPath = selectedFolder;
+
+        // Set the root index of the tree view to the selected folder
+        QModelIndex rootIndex = fileModel->setRootPath(selectedFolder);
+        treeView->setRootIndex(rootIndex);
+
+        // Optional: Expand the root index
+        treeView->expand(rootIndex);
+
+        // Emit signal that folder has changed
+        emit folderChanged(selectedFolder);
+
+        // Optional: Log the folder change
+        qDebug() << "Folder changed to: " << selectedFolder;
+    }
 }

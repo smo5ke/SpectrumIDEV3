@@ -1,3 +1,4 @@
+#include "SyntaxHighlighter.h"
 #include "AlifEditor.h"
 
 

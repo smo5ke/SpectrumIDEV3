@@ -1,18 +1,30 @@
+#include "AlifFolders.h"
+#include "AlifEditor.h"
 #include "AlifMenu.h"
+
 
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 #include <qshortcut.h>
+#include <QModelIndex>
 
-AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr) {
+
+AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr, FolderTree* folderTreePtr) {
 
     editorRef = editorPtr;
+    folderTreeRef = folderTreePtr;
 
     QMenu* fileMenu = parent->addMenu("ملف");
     QMenu* editMenu = parent->addMenu("تحرير");
     QMenu* runMenu = parent->addMenu("تشغيل");
     QMenu* helpMenu = parent->addMenu("مساعدة");
 
+    fileMenu->setMinimumWidth(200);
+    editMenu->setMinimumWidth(200);
+    runMenu->setMinimumWidth(200);
+    helpMenu->setMinimumWidth(200);
+
+    QAction* folderAction = new QAction("فتح مجلد", parent);
     QAction* newAction = new QAction("جديد", parent);
     QAction* openAction = new QAction("فتح", parent);
     QAction* saveAction = new QAction("حفظ", parent);
@@ -23,13 +35,15 @@ AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr) {
     QAction* aboutAction = new QAction("عن المحرر", parent);
 
 
-
+    fileMenu->addAction(folderAction);
+    fileMenu->addSeparator();
     fileMenu->addAction(newAction);
     fileMenu->addAction(openAction);
     fileMenu->addAction(saveAction);
     fileMenu->addAction(saveAsAction);
     fileMenu->addSeparator();
     fileMenu->addAction(optionsAction);
+    fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
     helpMenu->addAction(aboutAction);
@@ -43,14 +57,12 @@ AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr) {
     QShortcut* saveShortcut = new QShortcut(QKeySequence::Save, parent);
     connect(saveShortcut, &QShortcut::activated, this, &AlifMenuBar::saveFile);
 
-
-
+    connect(folderAction, &QAction::triggered, folderTreeRef, &FolderTree::openFolder);
     connect(newAction, &QAction::triggered, this, &AlifMenuBar::newFile);
     connect(openAction, &QAction::triggered, this, &AlifMenuBar::openFile);
     connect(saveAction, &QAction::triggered, this, &AlifMenuBar::saveFile);
     connect(saveAsAction, &QAction::triggered, this, &AlifMenuBar::saveFileAs);
 }
-
 
 
 

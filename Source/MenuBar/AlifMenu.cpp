@@ -11,6 +11,28 @@
 
 AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr, FolderTree* folderTreePtr) {
 
+    parent->setStyleSheet(R"(
+        QMenuBar {
+            color: #dddddd;
+            background-color: #1e202e;
+            spacing: 5px; /* spacing between menu bar items */
+        }
+
+        QMenuBar::item {
+            padding: 5px 9px;
+            background: transparent;
+            border-radius: 3px;
+        }
+
+        QMenuBar::item:selected { /* when selected using mouse or keyboard */
+            background: #303349;
+        }
+
+        QMenuBar::item:pressed {
+            background: #373a54;
+        }
+    )");
+
     editorRef = editorPtr;
     folderTreeRef = folderTreePtr;
 
@@ -48,6 +70,32 @@ AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr, FolderTree* fo
 
     helpMenu->addAction(aboutAction);
 
+
+    QString style = R"(
+        QMenu {
+            color: #dddddd;
+            background-color: #1e202e;
+            border: 1px solid #dddddd;
+            border-radius: 10px 10px 10px 10px;
+        }
+        QMenu::item {
+            border: 7px solid transparent;
+        }
+        QMenu::separator {
+            height: 1px;
+            background: #303349;
+            margin-left: 15px;
+            margin-right: 10px;
+        }
+        QMenu::indicator {
+            width: 1px;
+            height: 1px;
+        }
+)";
+    fileMenu->setStyleSheet(style);
+    editMenu->setStyleSheet(style);
+    runMenu->setStyleSheet(style);
+    helpMenu->setStyleSheet(style);
 
 
 

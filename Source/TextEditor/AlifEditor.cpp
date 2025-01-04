@@ -116,7 +116,7 @@ int AlifEditor::lineNumberAreaWidth() const {
     QFontMetrics fm(font);
 
     // Increased width to accommodate line numbers
-    int space = 12 + fm.horizontalAdvance(QLatin1Char('9')) * digits;
+    int space = 18 + fm.horizontalAdvance(QLatin1Char('9')) * digits;
     return space;
 }
 
@@ -189,17 +189,9 @@ void AlifEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
             painter.setPen(QColor(221, 221, 221));
 
             // Calculate text width
-            int numberWidth = painter.fontMetrics().horizontalAdvance(number);
-
-            // Draw line number aligned to the right of the number bar
-            painter.drawText(
-                lineNumberArea->width() - numberWidth - 7,  // X position
-                blockTop,
-                numberWidth + 10,  // Width
+            painter.drawText(12, blockTop, lineNumberArea->width() - 12,
                 fontMetrics().height(),
-                Qt::AlignRight | Qt::AlignVCenter,
-                number
-            );
+                Qt::AlignRight | Qt::AlignVCenter, number);
         }
 
         block = block.next();
@@ -237,4 +229,3 @@ QRect AlifEditor::blockBoundingRect(const QTextBlock& block) const {
     }
     return QRect();
 }
-

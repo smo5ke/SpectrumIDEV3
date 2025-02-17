@@ -69,7 +69,7 @@
       </Root>
     </QtRcc>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;..\Source\FoldersTree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;..\Source\FoldersTree;..\Source\Lexer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -78,7 +78,7 @@
       </Root>
     </QtRcc>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;..\Source\FoldersTree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;..\Source\FoldersTree;..\Source\Lexer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -111,21 +111,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtMoc Include="Spectrum.h" />
-    <ClCompile Include="..\Source\FoldersTree\AlifFolders.cpp" />
-    <ClCompile Include="..\Source\MenuBar\AlifMenu.cpp" />
-    <ClCompile Include="..\Source\Terminal\AlifTerminal.cpp">
+    <ClCompile Include="..\Source\FoldersTree\SPFolders.cpp" />
+    <ClCompile Include="..\Source\Lexer\AlifLexer.cpp" />
+    <ClCompile Include="..\Source\MenuBar\SPMenu.cpp" />
+    <ClCompile Include="..\Source\Terminal\SPTerminal.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
     </ClCompile>
-    <ClCompile Include="..\Source\TextEditor\AlifEditor.cpp">
+    <ClCompile Include="..\Source\TextEditor\SPEditor.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
     </ClCompile>
-    <ClCompile Include="..\Source\TextEditor\SyntaxHighlighter.cpp" />
+    <ClCompile Include="..\Source\TextEditor\SPHighlighter.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <ClCompile Include="Spectrum.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -133,17 +139,20 @@
     <QtRcc Include="..\Resources\Spectrum.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="..\Source\TextEditor\AlifEditor.h" />
-    <QtMoc Include="..\Source\TextEditor\SyntaxHighlighter.h" />
+    <QtMoc Include="..\Source\TextEditor\SPEditor.h" />
+    <QtMoc Include="..\Source\TextEditor\SPHighlighter.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="..\Source\MenuBar\AlifMenu.h" />
+    <QtMoc Include="..\Source\MenuBar\SPMenu.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="..\Source\Terminal\AlifTerminal.h" />
+    <QtMoc Include="..\Source\Terminal\SPTerminal.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="..\Source\FoldersTree\AlifFolders.h" />
+    <QtMoc Include="..\Source\FoldersTree\SPFolders.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Source\Lexer\AlifLexer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

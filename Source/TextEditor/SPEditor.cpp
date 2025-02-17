@@ -1,5 +1,5 @@
-#include "SyntaxHighlighter.h"
-#include "AlifEditor.h"
+#include "SPHighlighter.h"
+#include "SPEditor.h"
 
 #include <QPainter>
 #include <qabstracttextdocumentlayout.h>
@@ -8,11 +8,11 @@
 #include <QScrollBar>
 
 
-AlifEditor::AlifEditor(QWidget* parent) {
+SPEditor::SPEditor(QWidget* parent) {
 
     this->setTabStopDistance(32);
     this->setAcceptRichText(true);
-    this->setStyleSheet("QTextEdit { background-color: #141520; color: #dddddd;}");
+    this->setStyleSheet("QTextEdit { background-color: #141520; color: #cccccc;}");
     this->setFont(QFont("Tajawal", 12, 500));
 
     // set "force" cursor and text direction from right to left
@@ -21,20 +21,15 @@ AlifEditor::AlifEditor(QWidget* parent) {
     option.setTextDirection(Qt::RightToLeft);
     editorDocument->setDefaultTextOption(option);
 
-
-    highlighter = new SyntaxHighlighter(editorDocument);
-    setupHighlighter();
-
-
+    SyntaxHighlighter* highlighter = new SyntaxHighlighter(editorDocument);
 
     lineNumberArea = new LineNumberArea(this);
-
     connect(this, &QTextEdit::textChanged, this, [this]() {
         updateLineNumberAreaWidth(0);
         updateLineNumberArea();
         });
     connect(verticalScrollBar(), &QScrollBar::valueChanged,
-        this, &AlifEditor::updateLineNumberArea);
+        this, &SPEditor::updateLineNumberArea);
 
     // Handle special key events
     installEventFilter(this);
@@ -43,42 +38,7 @@ AlifEditor::AlifEditor(QWidget* parent) {
 }
 
 
-
-void AlifEditor::setupHighlighter() {
-    // highlighting rules
-
-    QTextCharFormat keywordFormat;
-    keywordFormat.setForeground(QColor("#00d6e8"));
-    highlighter->addHighlightingRule("(?:^|(?<!\\p{Arabic}[\\w_-]))(ك|و|في|او|أو|من|مع|صح|هل|اذا|إذا|ليس|مرر|عدم|ولد|صنف|خطا|خطأ|عام|احذف|دالة|لاجل|لأجل|والا|وإلا|توقف|نطاق|ارجع|اواذا|أوإذا|بينما|انتظر|استمر|مزامنة|استورد)(?![\\p{Arabic}\\w_-])", keywordFormat, SyntaxHighlighter::NormalState);
-
-    QTextCharFormat staticClassFormat;
-    staticClassFormat.setForeground(QColor("#f1a332"));
-    highlighter->addHighlightingRule("(?:^|(?<!\\p{Arabic}[\\w_-]))(مدى|اطبع|ادخل)(?![\\p{Arabic}\\w_-])", staticClassFormat, SyntaxHighlighter::NormalState);
-
-    QTextCharFormat numbersFormat;
-    numbersFormat.setForeground(QColor("#cc3beb"));
-    highlighter->addHighlightingRule("(?<![\\p{Arabic}\\w])\\d+(?![\\p{Arabic}\\w])", numbersFormat, SyntaxHighlighter::NormalState);
-
-    QTextCharFormat stringFormat;
-    stringFormat.setForeground(Qt::green);
-    highlighter->addHighlightingRule("\".*\"", stringFormat, SyntaxHighlighter::StringState);
-
-    QTextCharFormat formattedContentFormat;
-    formattedContentFormat.setForeground(Qt::white); // White content inside braces
-    highlighter->addHighlightingRule("{(.*?)}", formattedContentFormat, SyntaxHighlighter::NormalState);
-
-    QTextCharFormat formattedBraceFormat;
-    formattedBraceFormat.setForeground(QColor("#3985e0")); // curly braces
-    highlighter->addHighlightingRule("({)", formattedBraceFormat, SyntaxHighlighter::NormalState);
-    highlighter->addHighlightingRule("(})", formattedBraceFormat, SyntaxHighlighter::NormalState);
-
-    QTextCharFormat commentFormat;
-    commentFormat.setForeground(Qt::gray);
-    highlighter->addHighlightingRule("#.*", commentFormat, SyntaxHighlighter::CommentState);
-}
-
-
-bool AlifEditor::eventFilter(QObject* obj, QEvent* event) {
+bool SPEditor::eventFilter(QObject* obj, QEvent* event) {
     if (obj == this && event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
@@ -103,7 +63,7 @@ bool AlifEditor::eventFilter(QObject* obj, QEvent* event) {
 
 
 
-int AlifEditor::lineNumberAreaWidth() const {
+int SPEditor::lineNumberAreaWidth() const {
     int digits = 1;
     int max = qMax(1, document()->blockCount());
     while (max >= 10) {
@@ -120,7 +80,7 @@ int AlifEditor::lineNumberAreaWidth() const {
     return space;
 }
 
-void AlifEditor::updateLineNumberAreaWidth(int /* newBlockCount */) {
+void SPEditor::updateLineNumberAreaWidth(int /* newBlockCount */) {
     int width = lineNumberAreaWidth();
 
     // Set viewport margins to create space for line number area on the RIGHT
@@ -132,12 +92,12 @@ void AlifEditor::updateLineNumberAreaWidth(int /* newBlockCount */) {
     setTextCursor(cursor);
 }
 
-void AlifEditor::updateLineNumberArea() {
+void SPEditor::updateLineNumberArea() {
     // Trigger a repaint of the line number area
     lineNumberArea->update();
 }
 
-void AlifEditor::resizeEvent(QResizeEvent* event) {
+void SPEditor::resizeEvent(QResizeEvent* event) {
     QTextEdit::resizeEvent(event);
 
     QRect cr = contentsRect();
@@ -154,7 +114,7 @@ void AlifEditor::resizeEvent(QResizeEvent* event) {
 
 
 
-void AlifEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
+void SPEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
     QPainter painter(lineNumberArea);
 
     // Background color
@@ -199,7 +159,7 @@ void AlifEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
     }
 }
 
-QTextBlock AlifEditor::firstVisibleBlock() const {
+QTextBlock SPEditor::firstVisibleBlock() const {
     // Get the vertical scroll bar value
     int scrollValue = verticalScrollBar()->value();
 
@@ -220,7 +180,7 @@ QTextBlock AlifEditor::firstVisibleBlock() const {
     return document()->begin();
 }
 
-QRect AlifEditor::blockBoundingRect(const QTextBlock& block) const {
+QRect SPEditor::blockBoundingRect(const QTextBlock& block) const {
     QTextLayout* layout = block.layout();
     if (layout) {
         return QRect(0, layout->position().y(),

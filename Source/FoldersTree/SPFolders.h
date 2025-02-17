@@ -12,7 +12,7 @@ class FolderTree : public QDockWidget {
     Q_OBJECT
 
 public:
-    explicit FolderTree(class AlifEditor* textEditor, QWidget* parent = nullptr);
+    explicit FolderTree(class SPEditor* textEditor, QWidget* parent = nullptr);
 
     // Method to set root path for the file system model
     void setRootPath(const QString& path);
@@ -24,7 +24,7 @@ private:
     void setupConnections();
     QTreeView* treeView;
     QFileSystemModel* fileModel;
-    AlifEditor* textEditor;
+    SPEditor* textEditor;
     QString projectPath;
 
 signals:

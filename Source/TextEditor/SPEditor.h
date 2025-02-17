@@ -5,11 +5,11 @@
 
 class LineNumberArea;
 
-class AlifEditor : public QTextEdit {
+class SPEditor : public QTextEdit {
 	Q_OBJECT
 
 public:
-	AlifEditor(QWidget* parent = nullptr);
+	SPEditor(QWidget* parent = nullptr);
 
     void lineNumberAreaPaintEvent(QPaintEvent* event);
     int lineNumberAreaWidth() const;
@@ -24,8 +24,6 @@ private:
 	class SyntaxHighlighter* highlighter{};
     LineNumberArea* lineNumberArea{};
 
-	void setupHighlighter();
-
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void updateLineNumberArea();
@@ -34,17 +32,17 @@ private slots:
 
 class LineNumberArea : public QWidget {
 public:
-    LineNumberArea(AlifEditor* editor) : QWidget(editor), alifEditor(editor) {}
+    LineNumberArea(SPEditor* editor) : QWidget(editor), spEditor(editor) {}
 
     QSize sizeHint() const override {
-        return QSize(alifEditor->lineNumberAreaWidth(), height());
+        return QSize(spEditor->lineNumberAreaWidth(), height());
     }
 
 protected:
     void paintEvent(QPaintEvent* event) override {
-        alifEditor->lineNumberAreaPaintEvent(event);
+        spEditor->lineNumberAreaPaintEvent(event);
     }
 
 private:
-    AlifEditor* alifEditor;
+    SPEditor* spEditor;
 };

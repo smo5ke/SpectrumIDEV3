@@ -1,6 +1,6 @@
-#include "AlifFolders.h"
-#include "AlifEditor.h"
-#include "AlifMenu.h"
+#include "SPFolders.h"
+#include "SPEditor.h"
+#include "SPMenu.h"
 
 
 #include <qmessagebox.h>
@@ -9,7 +9,7 @@
 #include <QModelIndex>
 
 
-AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr, FolderTree* folderTreePtr) {
+AlifMenuBar::AlifMenuBar(QMenuBar* parent, SPEditor* editorPtr, FolderTree* folderTreePtr) {
 
     parent->setStyleSheet(R"(
         QMenuBar {
@@ -46,7 +46,7 @@ AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr, FolderTree* fo
     runMenu->setMinimumWidth(200);
     helpMenu->setMinimumWidth(200);
 
-    QAction* folderAction = new QAction("فتح مجلد", parent);
+    //QAction* folderAction = new QAction("فتح مجلد", parent);
     QAction* newAction = new QAction("جديد", parent);
     QAction* openAction = new QAction("فتح", parent);
     QAction* saveAction = new QAction("حفظ", parent);
@@ -57,7 +57,7 @@ AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr, FolderTree* fo
     QAction* aboutAction = new QAction("عن المحرر", parent);
 
 
-    fileMenu->addAction(folderAction);
+    //fileMenu->addAction(folderAction);
     fileMenu->addSeparator();
     fileMenu->addAction(newAction);
     fileMenu->addAction(openAction);
@@ -105,7 +105,7 @@ AlifMenuBar::AlifMenuBar(QMenuBar* parent, AlifEditor* editorPtr, FolderTree* fo
     QShortcut* saveShortcut = new QShortcut(QKeySequence::Save, parent);
     connect(saveShortcut, &QShortcut::activated, this, &AlifMenuBar::saveFile);
 
-    connect(folderAction, &QAction::triggered, folderTreeRef, &FolderTree::openFolder);
+    //connect(folderAction, &QAction::triggered, folderTreeRef, &FolderTree::openFolder);
     connect(newAction, &QAction::triggered, this, &AlifMenuBar::newFile);
     connect(openAction, &QAction::triggered, this, &AlifMenuBar::openFile);
     connect(saveAction, &QAction::triggered, this, &AlifMenuBar::saveFile);

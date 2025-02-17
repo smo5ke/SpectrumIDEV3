@@ -1,5 +1,5 @@
-#include "AlifEditor.h"
-#include "AlifFolders.h"
+#include "SPEditor.h"
+#include "SPFolders.h"
 
 #include <QVBoxLayout>
 #include <QDir>
@@ -10,7 +10,7 @@
 #include <qheaderview.h>
 #include <QPainter>
 
-FolderTree::FolderTree(AlifEditor* textEditor, QWidget* parent)
+FolderTree::FolderTree(SPEditor* textEditor, QWidget* parent)
     : QDockWidget(parent), textEditor(textEditor)
 {
     setWindowTitle("الملفات");

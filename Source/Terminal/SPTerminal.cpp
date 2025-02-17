@@ -1,4 +1,4 @@
-#include "AlifTerminal.h"
+#include "SPTerminal.h"
 
 #include <qdockwidget.h>
 #include <QTextBlock>

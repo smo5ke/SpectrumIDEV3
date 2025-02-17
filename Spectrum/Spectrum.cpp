@@ -28,18 +28,18 @@ Spectrum::Spectrum(QWidget *parent)
     vlay->setSpacing(0);
 
 
-    editor = new AlifEditor(center);
-    terminal = new Terminal(this);
-    folderTree = new FolderTree(editor, this);
+    editor = new SPEditor(center);
+    //terminal = new Terminal(this);
+    //folderTree = new FolderTree(editor, this);
     menu = new AlifMenuBar(this->menuBar(), editor, folderTree);
 
     
     vlay->addWidget(editor);
-    vlay->addWidget(terminal);
+    //vlay->addWidget(terminal);
 
 
-    addDockWidget(Qt::BottomDockWidgetArea, terminal); // يجب أن تكون بعد vlay->addWidget(terminal)
-    addDockWidget(Qt::RightDockWidgetArea, folderTree);
+    //addDockWidget(Qt::BottomDockWidgetArea, terminal); // يجب أن تكون بعد vlay->addWidget(terminal)
+    //addDockWidget(Qt::RightDockWidgetArea, folderTree);
     this->setCentralWidget(center);
 }
 

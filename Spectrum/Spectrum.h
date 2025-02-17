@@ -1,10 +1,10 @@
 #pragma once
 
-#include "AlifFolders.h"
-#include "AlifEditor.h"
-#include "AlifTerminal.h"
-#include "SyntaxHighlighter.h"
-#include "AlifMenu.h"
+#include "SPFolders.h"
+#include "SPEditor.h"
+#include "SPTerminal.h"
+#include "SPHighlighter.h"
+#include "SPMenu.h"
 
 #include <QMainWindow>
 
@@ -19,7 +19,7 @@ public:
 
 private:
     AlifMenuBar* menu{};
-    AlifEditor* editor{};
+    SPEditor* editor{};
     Terminal* terminal{};
     FolderTree* folderTree{};
 };

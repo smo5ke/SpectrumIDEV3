@@ -113,6 +113,7 @@
     <QtMoc Include="Spectrum.h" />
     <ClCompile Include="..\Source\FoldersTree\SPFolders.cpp" />
     <ClCompile Include="..\Source\Lexer\AlifLexer.cpp" />
+    <ClCompile Include="..\Source\Lexer\AlifComplete.cpp" />
     <ClCompile Include="..\Source\MenuBar\SPMenu.cpp" />
     <ClCompile Include="..\Source\Terminal\SPTerminal.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
@@ -153,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Lexer\AlifLexer.h" />
+    <QtMoc Include="..\Source\Lexer\AlifComplete.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

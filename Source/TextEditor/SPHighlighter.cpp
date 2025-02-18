@@ -38,7 +38,6 @@ void SyntaxHighlighter::highlightBlock(const QString& text) {
             break;
         case TokenType::Comment:
             format.setForeground(QColor("#6272A4"));
-            format.setFontItalic(true);
             break;
         case TokenType::String:
             format.setForeground(QColor("#50FA7B"));

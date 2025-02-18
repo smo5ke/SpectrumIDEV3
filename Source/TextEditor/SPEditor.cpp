@@ -21,7 +21,8 @@ SPEditor::SPEditor(QWidget* parent) {
     option.setTextDirection(Qt::RightToLeft);
     editorDocument->setDefaultTextOption(option);
 
-    SyntaxHighlighter* highlighter = new SyntaxHighlighter(editorDocument);
+    highlighter = new SyntaxHighlighter(editorDocument);
+    autoComplete = new AutoComplete(this, parent);
 
     lineNumberArea = new LineNumberArea(this);
     connect(this, &QTextEdit::textChanged, this, [this]() {
@@ -189,3 +190,5 @@ QRect SPEditor::blockBoundingRect(const QTextBlock& block) const {
     }
     return QRect();
 }
+
+

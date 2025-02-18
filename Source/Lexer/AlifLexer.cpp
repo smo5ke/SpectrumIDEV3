@@ -102,7 +102,7 @@ bool Lexer::isKeyword(const QString& word) {
 
 bool Lexer::isKeyword1(const QString& word) {
     static const QSet<QString> keywords = {
-        "اطبع", "ادخل"
+        "اطبع", "ادخل", "مدى"
     };
     return keywords.contains(word);
 }

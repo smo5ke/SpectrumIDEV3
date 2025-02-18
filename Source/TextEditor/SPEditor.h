@@ -1,5 +1,5 @@
 #pragma once
-
+#include "AlifComplete.h"
 #include <qtextedit.h>
 
 
@@ -23,6 +23,8 @@ protected:
 private:
 	class SyntaxHighlighter* highlighter{};
     LineNumberArea* lineNumberArea{};
+    SyntaxHighlighter* highlighter{};
+    AutoComplete* autoComplete{};
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);

@@ -1,7 +1,4 @@
-#include "SPFolders.h"
-#include "SPEditor.h"
 #include "SPMenu.h"
-
 
 #include <qmessagebox.h>
 #include <qfiledialog.h>
@@ -9,7 +6,7 @@
 #include <QModelIndex>
 
 
-AlifMenuBar::AlifMenuBar(QMenuBar* parent, SPEditor* editorPtr, FolderTree* folderTreePtr) {
+SPMenuBar::SPMenuBar(QWidget* parent) {
 
     parent->setStyleSheet(R"(
         QMenuBar {
@@ -33,13 +30,10 @@ AlifMenuBar::AlifMenuBar(QMenuBar* parent, SPEditor* editorPtr, FolderTree* fold
         }
     )");
 
-    editorRef = editorPtr;
-    folderTreeRef = folderTreePtr;
-
-    QMenu* fileMenu = parent->addMenu("ملف");
-    QMenu* editMenu = parent->addMenu("تحرير");
-    QMenu* runMenu = parent->addMenu("تشغيل");
-    QMenu* helpMenu = parent->addMenu("مساعدة");
+    QMenu* fileMenu = addMenu("ملف");
+    QMenu* editMenu = addMenu("تحرير");
+    QMenu* runMenu = addMenu("تشغيل");
+    QMenu* helpMenu = addMenu("مساعدة");
 
     fileMenu->setMinimumWidth(200);
     editMenu->setMinimumWidth(200);
@@ -99,104 +93,15 @@ AlifMenuBar::AlifMenuBar(QMenuBar* parent, SPEditor* editorPtr, FolderTree* fold
 
 
 
-
-
     // Create a shortcut for Ctrl+S
-    QShortcut* saveShortcut = new QShortcut(QKeySequence::Save, parent);
-    connect(saveShortcut, &QShortcut::activated, this, &AlifMenuBar::saveFile);
+    QShortcut* saveShortcut = new QShortcut(QKeySequence::Save, this);
+    connect(saveShortcut, &QShortcut::activated, this, &SPMenuBar::onSaveAction);
 
-    //connect(folderAction, &QAction::triggered, folderTreeRef, &FolderTree::openFolder);
-    connect(newAction, &QAction::triggered, this, &AlifMenuBar::newFile);
-    connect(openAction, &QAction::triggered, this, &AlifMenuBar::openFile);
-    connect(saveAction, &QAction::triggered, this, &AlifMenuBar::saveFile);
-    connect(saveAsAction, &QAction::triggered, this, &AlifMenuBar::saveFileAs);
+    connect(newAction, &QAction::triggered, this, &SPMenuBar::onNewAction);
+    connect(openAction, &QAction::triggered, this, &SPMenuBar::onOpenAction);
+    connect(saveAction, &QAction::triggered, this, &SPMenuBar::onSaveAction);
+    connect(saveAsAction, &QAction::triggered, this, &SPMenuBar::onSaveAsAction);
 }
 
-
-
-void AlifMenuBar::newFile() {
-    if (maybeSave()) {
-        // Clear the text edit widget to start a new file
-        editorRef->clear();
-        currentFile.clear();
-    }
-}
-
-void AlifMenuBar::openFile() {
-    if (maybeSave()) {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("فتح ملف"), "", tr("ملف ألف (*.alif);;All Files (*)"));
-        if (!fileName.isEmpty()) {
-            QFile file(fileName);
-            if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                QTextStream in(&file);
-                editorRef->setPlainText(in.readAll());
-                file.close();
-                currentFile = fileName;
-                editorRef->document()->setModified(false);
-            }
-            else {
-                QMessageBox::warning(this, tr("خطأ"), tr("لا يمكن فتح الملف"));
-            }
-        }
-    }
-}
-
-bool AlifMenuBar::saveFile() {
-    if (currentFile.isEmpty()) {
-        saveFileAs();
-        return true;
-    }
-    else {
-        QFile file(currentFile);
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream out(&file);
-            out << editorRef->toPlainText();
-            file.close();
-            editorRef->document()->setModified(false);
-        }
-        else {
-            QMessageBox::warning(this, tr("خطأ"), tr("لا يمكن حفظ الملف"));
-            return false;
-        }
-    }
-    return false;
-}
-
-
-
-void AlifMenuBar::saveFileAs() {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("حفظ الملف"), "", tr("ملف ألف (*.alif);;All Files (*)"));
-    if (!fileName.isEmpty()) {
-        QFile file(fileName);
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream out(&file);
-            out << editorRef->toPlainText();
-            file.close();
-            currentFile = fileName;
-            editorRef->document()->setModified(false);
-        }
-        else {
-            QMessageBox::warning(this, tr("خطأ"), tr("لا يمكن حفظ الملف"));
-        }
-    }
-}
-
-
-bool AlifMenuBar::maybeSave() {
-    if (editorRef->document()->isModified()) {
-        QMessageBox::StandardButton ret;
-        ret = QMessageBox::warning(this, tr("ألف"),
-            tr("تم التعديل على الملف.\n"
-                "هل تريد حفظ التغييرات؟"),
-            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        if (ret == QMessageBox::Save) {
-            return saveFile();
-        }
-        else if (ret == QMessageBox::Cancel) {
-            return false;
-        }
-    }
-    return true;
-}
 
 

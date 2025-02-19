@@ -6,6 +6,9 @@
 #include <qrect.h>
 #include <QTextBlock>
 #include <QScrollBar>
+#include <QMimeData>
+#include <QFile>
+#include <QMessageBox>
 
 
 SPEditor::SPEditor(QWidget* parent) {
@@ -15,13 +18,16 @@ SPEditor::SPEditor(QWidget* parent) {
     this->setStyleSheet("QTextEdit { background-color: #141520; color: #cccccc;}");
     this->setFont(QFont("Tajawal", 12, 500));
 
+    setAcceptDrops(true);
+
     // set "force" cursor and text direction from right to left
     QTextDocument* editorDocument = this->document();
     QTextOption option = editorDocument->defaultTextOption();
     option.setTextDirection(Qt::RightToLeft);
     editorDocument->setDefaultTextOption(option);
 
-    highlighter = new SyntaxHighlighter(editorDocument);
+    SyntaxHighlighter* highlighter = new SyntaxHighlighter(editorDocument);
+
     autoComplete = new AutoComplete(this, parent);
 
     lineNumberArea = new LineNumberArea(this);
@@ -192,3 +198,41 @@ QRect SPEditor::blockBoundingRect(const QTextBlock& block) const {
 }
 
 
+
+
+
+
+void SPEditor::dragEnterEvent(QDragEnterEvent* event) {
+    // Check if the dragged data contains URLs (files)
+    if (event->mimeData()->hasUrls()) {
+        // Check if any of the URLs have a .alif ... extension
+        for (const QUrl& url : event->mimeData()->urls()) {
+            if (url.fileName().endsWith(".alif", Qt::CaseInsensitive) or
+                url.fileName().endsWith(".aliflib", Qt::CaseInsensitive) or
+                url.fileName().endsWith(".txt", Qt::CaseInsensitive)) {
+                event->acceptProposedAction(); // Accept the drag event
+                return;
+            }
+        }
+    }
+    event->ignore(); // Ignore if not a .alif ... file
+}
+
+void SPEditor::dropEvent(QDropEvent* event) {
+    // Check if the dropped data contains URLs (files)
+    if (event->mimeData()->hasUrls()) {
+        for (const QUrl& url : event->mimeData()->urls()) {
+            if (url.fileName().endsWith(".alif", Qt::CaseInsensitive) or
+                url.fileName().endsWith(".aliflib", Qt::CaseInsensitive) or 
+                url.fileName().endsWith(".txt", Qt::CaseInsensitive)) {
+                
+                QString filePath = url.toLocalFile();
+                emit openRequest(filePath);
+
+                QTextEdit::dropEvent(event);
+                return;
+            }
+        }
+    }
+    event->ignore(); // Ignore if not a .alif ... file
+}

@@ -1,4 +1,6 @@
 #pragma once
+
+#include "SPHighlighter.h"
 #include "AlifComplete.h"
 #include <qtextedit.h>
 
@@ -20,15 +22,21 @@ protected:
     void resizeEvent(QResizeEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
 
+    void dragEnterEvent(QDragEnterEvent* event) override;
+    void dropEvent(QDropEvent* event) override;
+
 private:
-	class SyntaxHighlighter* highlighter{};
-    LineNumberArea* lineNumberArea{};
     SyntaxHighlighter* highlighter{};
+    LineNumberArea* lineNumberArea{};
     AutoComplete* autoComplete{};
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void updateLineNumberArea();
+
+
+signals:
+    void openRequest(QString filePath);
 };
 
 

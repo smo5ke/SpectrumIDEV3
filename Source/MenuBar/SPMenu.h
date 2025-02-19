@@ -6,22 +6,30 @@
 
 
 
-class AlifMenuBar : public QMenuBar {
+class SPMenuBar : public QMenuBar {
 
 	Q_OBJECT
 public:
-	AlifMenuBar(QMenuBar* parent = nullptr, class SPEditor* editorPtr = nullptr, class FolderTree* folderTreePtr = nullptr);
+    SPMenuBar(QWidget* parent = nullptr);
 
 
-private:
-    class SPEditor* editorRef{};
-    FolderTree* folderTreeRef{};
-    QString currentFile{};
+signals:
+    void newRequested();
+    void openRequested();
+    void saveRequested();
+    void saveAsRequested();
 
 private slots:
-    void newFile();
-    void openFile();
-    bool saveFile();
-    void saveFileAs();
-    bool maybeSave();
+    void onNewAction() {
+        emit newRequested();
+    }
+    void onOpenAction() {
+        emit openRequested();
+    }
+    void onSaveAction() {
+        emit saveRequested();
+    }
+    void onSaveAsAction() {
+        emit saveAsRequested();
+    }
 };

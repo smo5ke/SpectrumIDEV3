@@ -5,6 +5,7 @@
 #include "SPTerminal.h"
 #include "SPHighlighter.h"
 #include "SPMenu.h"
+#include "SPFileIO.h"
 
 #include <QMainWindow>
 
@@ -17,9 +18,17 @@ public:
     Spectrum(QWidget* parent = nullptr);
     ~Spectrum();
 
+
+
+private slots:
+    void onNewRequested();
+    void onOpenRequested(QString filePath);
+    void onSaveRequested();
+    void onSaveAsRequested();
+
+
 private:
-    AlifMenuBar* menu{};
     SPEditor* editor{};
-    Terminal* terminal{};
-    FolderTree* folderTree{};
+    SPMenuBar* menuBar{};
+    SPFileIO* fileIO{};
 };

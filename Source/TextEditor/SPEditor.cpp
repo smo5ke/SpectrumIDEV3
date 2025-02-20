@@ -228,11 +228,19 @@ void SPEditor::dropEvent(QDropEvent* event) {
                 
                 QString filePath = url.toLocalFile();
                 emit openRequest(filePath);
-
-                QTextEdit::dropEvent(event);
+                
+                event->acceptProposedAction();
                 return;
             }
         }
     }
     event->ignore(); // Ignore if not a .alif ... file
+}
+
+void SPEditor::dragMoveEvent(QDragMoveEvent* event) { // ضروري لمنع ظهور سلوك غريب بعد الإفلات
+    event->acceptProposedAction();
+}
+
+void SPEditor::dragLeaveEvent(QDragLeaveEvent* event) {
+    event->accept();
 }

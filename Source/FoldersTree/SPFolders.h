@@ -3,9 +3,8 @@
 #include <QDockWidget>
 #include <QTreeView>
 #include <QFileSystemModel>
-#include <qurl.h>
-#include <qmessagebox.h>
-#include <qdesktopservices.h>
+#include <QUrl>
+#include <QMessageBox>
 
 
 class FolderTree : public QDockWidget {

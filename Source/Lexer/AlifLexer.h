@@ -1,7 +1,7 @@
 #pragma once
 
-#include <qstring.h>
-#include <qset.h>
+#include <QString>
+#include <QSet>
 
 enum class TokenType {
     Keyword,

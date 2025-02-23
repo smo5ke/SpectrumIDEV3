@@ -1,7 +1,7 @@
 #pragma once
-
 #include "AlifLexer.h"
-#include <qsyntaxhighlighter.h>
+#include <QSyntaxHighlighter>
+
 
 
 class SyntaxHighlighter : public QSyntaxHighlighter {

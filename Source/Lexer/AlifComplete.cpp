@@ -1,7 +1,6 @@
 #include "AlifComplete.h"
 #include <QKeyEvent>
 #include <QTextCursor>
-#include <QDebug>
 #include <QVBoxLayout>
 
 AutoComplete::AutoComplete(QTextEdit* editor, QObject* parent)

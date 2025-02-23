@@ -1,11 +1,9 @@
 #include "SPTerminal.h"
 
-#include <qdockwidget.h>
+#include <QDockWidget>
 #include <QTextBlock>
 #include <QKeyEvent>
-//#include <QApplication>
-#include <QDebug>
-
+    
 Terminal::Terminal(QWidget* parent)
     : QDockWidget(parent),
     currentHistoryIndex(-1),

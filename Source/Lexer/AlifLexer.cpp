@@ -1,8 +1,8 @@
 #include "AlifLexer.h"
-#include <qstring.h>
-#include <qvector.h>
-#include <qset.h>
-#include <qchar.h>
+#include <QString>
+#include <QVector>
+#include <QSet>
+#include <QChar>
 
 
 QVector<Token> Lexer::tokenize(const QString text) {

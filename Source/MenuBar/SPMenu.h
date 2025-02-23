@@ -1,8 +1,8 @@
 #pragma once
 
-#include <qmenubar.h>
-#include <qfilesystemmodel.h>
-#include <qtreeview.h>
+#include <QMenuBar>
+#include <QFileSystemModel>
+#include <QTreeView>
 
 
 

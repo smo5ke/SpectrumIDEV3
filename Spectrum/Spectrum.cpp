@@ -1,6 +1,6 @@
 #include "Spectrum.h"
 
-#include <qdockwidget.h>
+#include <QDockWidget>
 #include <QVBoxLayout>
 #include <QScreen>
 #include <QShortcut>
@@ -11,7 +11,7 @@ Spectrum::Spectrum(QWidget *parent)
 {
     this->setWindowTitle(" Spectrum V3 - Alif5 Editor");
     QScreen* screenSize = QGuiApplication::primaryScreen();
-    this->setGeometry(screenSize->size().width() / 8, screenSize->size().height() / 8, 800, 600);
+    this->setGeometry(screenSize->size().width() / 5, screenSize->size().height() / 9, 400, 600);
     setStyleSheet(R"(
             QMainWindow::separator {
                 background-color: #2a2c44;

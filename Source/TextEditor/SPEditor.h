@@ -2,7 +2,7 @@
 
 #include "SPHighlighter.h"
 #include "AlifComplete.h"
-#include <qtextedit.h>
+#include <QTextEdit>
 
 
 class LineNumberArea;

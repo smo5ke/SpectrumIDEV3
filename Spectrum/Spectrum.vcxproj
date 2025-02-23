@@ -39,11 +39,13 @@
     <QtInstall>6.8.1_msvc2022_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
+    <QtDeploy>true</QtDeploy>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>6.8.1_msvc2022_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
+    <QtDeploy>true</QtDeploy>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
@@ -70,6 +72,7 @@
     </QtRcc>
     <ClCompile>
       <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;..\Source\FoldersTree;..\Source\Lexer;..\Source\Functions;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -79,6 +82,7 @@
     </QtRcc>
     <ClCompile>
       <AdditionalIncludeDirectories>..\Source\TextEditor;..\Source\MenuBar;..\Source\Terminal;..\Source\FoldersTree;..\Source\Lexer;..\Source\Functions;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -154,9 +158,16 @@
     <QtMoc Include="..\Source\FoldersTree\SPFolders.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <QtMoc Include="..\Source\Functions\SPFileIO.h" />
     <ClInclude Include="..\Source\Lexer\AlifLexer.h" />
     <QtMoc Include="..\Source\Lexer\AlifComplete.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\TaifLogo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Spectrum.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

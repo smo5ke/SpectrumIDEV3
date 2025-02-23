@@ -29,19 +29,25 @@
     <ClCompile Include="Spectrum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <QtMoc Include="..\Source\TextEditor\SyntaxHighlighter.h">
+    <QtMoc Include="..\Source\TextEditor\SPEditor.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="..\Source\TextEditor\AlifEditor.h">
+    <QtMoc Include="..\Source\TextEditor\SPHighlighter.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="..\Source\MenuBar\AlifMenu.h">
+    <QtMoc Include="..\Source\MenuBar\SPMenu.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="..\Source\Terminal\AlifTerminal.h">
+    <QtMoc Include="..\Source\Terminal\SPTerminal.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="..\Source\FoldersTree\AlifFolders.h">
+    <QtMoc Include="..\Source\FoldersTree\SPFolders.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\Source\Functions\SPFileIO.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\Source\Lexer\AlifComplete.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -49,22 +55,28 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\TextEditor\AlifEditor.cpp">
+    <ClCompile Include="..\Source\FoldersTree\SPFolders.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\MenuBar\AlifMenu.cpp">
+    <ClCompile Include="..\Source\Functions\SPFileIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Terminal\AlifTerminal.cpp">
+    <ClCompile Include="..\Source\Lexer\AlifLexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\FoldersTree\AlifFolders.cpp">
+    <ClCompile Include="..\Source\Lexer\AlifComplete.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Lexer\SPLexer.cpp">
+    <ClCompile Include="..\Source\MenuBar\SPMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\TextEditor\SyntaxHighlighter.cpp">
+    <ClCompile Include="..\Source\Terminal\SPTerminal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\TextEditor\SPEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\TextEditor\SPHighlighter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,8 +86,21 @@
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Source\Lexer\SPLexer.h">
+    <ClInclude Include="..\Source\Lexer\AlifLexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\TaifLogo.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Spectrum.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

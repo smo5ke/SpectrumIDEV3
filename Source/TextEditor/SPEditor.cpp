@@ -2,13 +2,11 @@
 #include "SPEditor.h"
 
 #include <QPainter>
-#include <qabstracttextdocumentlayout.h>
-#include <qrect.h>
+#include <QAbstractTextDocumentLayout>
+#include <QRect>
 #include <QTextBlock>
 #include <QScrollBar>
 #include <QMimeData>
-#include <QFile>
-#include <QMessageBox>
 
 
 SPEditor::SPEditor(QWidget* parent) {

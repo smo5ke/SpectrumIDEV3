@@ -4,10 +4,10 @@
 #include <QVBoxLayout>
 #include <QDir>
 #include <QFile>
-#include <qfiledialog.h>
+#include <QFileDialog>
 #include <QTextStream>
 #include <QMessageBox>
-#include <qheaderview.h>
+#include <QHeaderView>
 #include <QPainter>
 
 FolderTree::FolderTree(SPEditor* textEditor, QWidget* parent)

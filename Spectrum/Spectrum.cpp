@@ -9,9 +9,9 @@
 Spectrum::Spectrum(QWidget *parent)
     : QMainWindow(parent)
 {
-    this->setWindowTitle(" Spectrum V3 - Alif5 Editor");
+    this->setWindowTitle(" طـيـف ");
     QScreen* screenSize = QGuiApplication::primaryScreen();
-    this->setGeometry(screenSize->size().width() / 5, screenSize->size().height() / 9, 400, 600);
+    this->setGeometry(screenSize->size().width() / 3, screenSize->size().height() / 7, 400, 450);
     setStyleSheet(R"(
             QMainWindow::separator {
                 background-color: #2a2c44;

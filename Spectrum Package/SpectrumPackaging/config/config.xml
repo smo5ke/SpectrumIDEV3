@@ -5,5 +5,5 @@
     <Title>Spectrum Installer</Title>
     <Publisher>Spectrum</Publisher>
     <StartMenuDir>Spectrum</StartMenuDir>
-    <TargetDir>@HomeDir@/Spectrum</TargetDir>
+    <TargetDir>@ApplicationsDir@/Spectrum</TargetDir>
 </Installer>

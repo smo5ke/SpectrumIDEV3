@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SPFolders.h"
+//#include "SPFolders.h"
 #include "SPEditor.h"
-#include "SPTerminal.h"
+//#include "SPTerminal.h"
 #include "SPHighlighter.h"
 #include "SPMenu.h"
 #include "SPFileIO.h"

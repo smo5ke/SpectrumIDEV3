@@ -1,0 +1,21 @@
+Windows:
+
+
+Linux:
+sudo apt install libxcb-cursor0 libxcb-cusor-dev // for qt online installer
+
+sudo apt install build-essential // for build on QtCreator
+sudo apt install qt6-base-dev // for build on QtCreator
+sudo apt install cmake // for build on QtCreator
+
+
+
+MacOS:
+
+
+
+
+Common:
+لتحميل مكتبة QT6
+URL for HTTP download mirrors "https://download.qt.io/static/mirrorlist/"
+on cmd pass "NameOfQtOnlineInstaller.exe --mirror https://mirrors.ocf.berkeley.edu/qt/"

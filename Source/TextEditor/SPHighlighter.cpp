@@ -1,4 +1,4 @@
-#include "SPhighlighter.h"
+#include "SPHighlighter.h"
 
 #include <QTextCursor>
 #include <QTextCharFormat>

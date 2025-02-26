@@ -8,6 +8,13 @@ Linux:
  sudo apt install qt6-base-dev // for build on QtCreator
  sudo apt install cmake // for build on QtCreator
 
+ add path to env path:
+  path form: export PATH=/path/to/qt/bin:$PATH
+  
+  nano ~/.bashrc
+  write the path at the end of file then save and close
+  source ~/.bashrc
+
  linuxdeployqt:
   sudo apt install libfuse2
   download linuxdeployqt-continuous-x86_64.AppImage

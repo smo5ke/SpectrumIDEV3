@@ -11,18 +11,22 @@
     <RequiresAdminRights>true</RequiresAdminRights>
     <Operations>
         <Operation name="Execute">
-            <Argument>{1}</Argument>
             <Argument>powershell</Argument>
-            <Argument>-Command</Argument>
-            <Argument>"setx PATH "%PATH%;@ApplicationsDir@\Spectrum\alif""</Argument>
+            <Argument>-command</Argument>
+            <Argument>
+            $newPath = "@TargetDir@\alif";
+            $existingPath = [System.Environment]::GetEnvironmentVariable('PATH', [System.EnvironmentVariableTarget]::User);
+            $updatedPath = "$existingPath;$newPath";
+            [System.Environment]::SetEnvironmentVariable('PATH', $updatedPath, [System.EnvironmentVariableTarget]::User);
+            </Argument>
         </Operation>
         <Operation name="CreateShortcut">
-            <Argument>@ApplicationsDir@\Spectrum\Spectrum.exe</Argument> <!-- Path to your .exe file -->
+            <Argument>@TargetDir@\Spectrum.exe</Argument> <!-- Path to your .exe file -->
             <Argument>@DesktopDir@\Spectrum.lnk</Argument> <!-- Shortcut location (desktop) -->
         </Operation>
         <!-- Create a shortcut in the Start Menu -->
         <Operation name="CreateShortcut">
-            <Argument>@ApplicationsDir@\Spectrum\Spectrum.exe</Argument> <!-- Path to your .exe file -->
+            <Argument>@TargetDir@\Spectrum.exe</Argument> <!-- Path to your .exe file -->
             <Argument>@StartMenuDir@\Spectrum.lnk</Argument> <!-- Shortcut location (Start Menu) -->
         </Operation>
     </Operations>

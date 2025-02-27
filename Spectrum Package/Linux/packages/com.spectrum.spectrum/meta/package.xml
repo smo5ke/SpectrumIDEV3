@@ -11,7 +11,7 @@
     <RequiresAdminRights>true</RequiresAdminRights>
     <Operations>
         <Operation name="Execute">
-            <Argument>/bin/bash</Argument>
+            <Argument>bash</Argument>
             <Argument>-c</Argument>
             <Argument>echo export "PATH=@TargetDir@/alif:$PATH" >> ~/.bashrc</Argument>
             <Argument>source ~/.bashrc</Argument>

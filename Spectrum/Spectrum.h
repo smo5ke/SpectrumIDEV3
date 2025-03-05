@@ -15,7 +15,7 @@ class Spectrum : public QMainWindow
     Q_OBJECT
 
 public:
-    Spectrum(QWidget* parent = nullptr);
+    Spectrum(const QString& filePath = "", QWidget* parent = nullptr);
     ~Spectrum();
 
 

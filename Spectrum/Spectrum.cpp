@@ -6,7 +6,7 @@
 #include <QShortcut>
 
 
-Spectrum::Spectrum(QWidget *parent)
+Spectrum::Spectrum(const QString& filePath, QWidget *parent)
     : QMainWindow(parent)
 {
     this->setWindowTitle(" طـيـف ");
@@ -44,9 +44,10 @@ Spectrum::Spectrum(QWidget *parent)
     //addDockWidget(Qt::RightDockWidgetArea, folderTree);
     this->setCentralWidget(center);
 
-
-
-
+    // لتشغيل ملف ألف بإستخدام محرر طيف عند إختيار المحرر ك برنامج للتشغيل
+    if (!filePath.isEmpty()) {
+        this->onOpenRequested(filePath);
+    }
 
 
     connect(menuBar, &SPMenuBar::newRequested, this, &Spectrum::onNewRequested);

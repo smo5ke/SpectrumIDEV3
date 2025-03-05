@@ -12,7 +12,6 @@ int main(int argc, char *argv[])
     if (app.arguments().count() > 2) return -1;
     if (app.arguments().count() == 2) filePath = app.arguments().at(1);
 
-    filePath = "Status.alif";
     Spectrum w(filePath);
     w.show();
     return app.exec();

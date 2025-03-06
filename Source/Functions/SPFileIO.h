@@ -23,14 +23,6 @@ public:
     void saveFileAs(const QString& content);
 
 
-signals:
-    void checkEditorModified();
-
-    // Slot to receive the result
-public slots:
-    void onEditorModified(const QString& content);
-
-
 
 private:
     QString currentFile{};

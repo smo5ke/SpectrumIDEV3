@@ -1,13 +1,10 @@
 #include "SPFileIO.h"
 
 void SPFileIO::newFile() {
-    emit checkEditorModified();
     currentFile.clear();
 }
 
 QString SPFileIO::openFile(QString filePath) {
-    emit checkEditorModified();
-
     QString content{};
     filePath.isEmpty() ? filePath = QFileDialog::getOpenFileName(nullptr, "فتح ملف", "", "ملف ألف (*.alif);;All Files (*)") : filePath;
     if (!filePath.isEmpty()) {
@@ -17,12 +14,13 @@ QString SPFileIO::openFile(QString filePath) {
             content = in.readAll();
             file.close();
             currentFile = filePath;
+            return content;
         }
         else {
             QMessageBox::warning(nullptr, "خطأ", "لا يمكن فتح الملف");
         }
     }
-    return content;
+    return nullptr;
 }
 
 bool SPFileIO::saveFile(const QString& content) {
@@ -61,17 +59,5 @@ void SPFileIO::saveFileAs(const QString& content) {
         else {
             QMessageBox::warning(nullptr, "خطأ", "لا يمكن حفظ الملف");
         }
-    }
-}
-
-
-void SPFileIO::onEditorModified(const QString& content) {
-    QMessageBox::StandardButton ret;
-    ret = QMessageBox::warning(nullptr, "ألف",
-        "تم التعديل على الملف.\n"
-        "هل تريد حفظ التغييرات؟",
-        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-    if (ret == QMessageBox::Save) {
-        saveFile(content);
     }
 }

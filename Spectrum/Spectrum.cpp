@@ -54,10 +54,6 @@ Spectrum::Spectrum(const QString& filePath, QWidget *parent)
     connect(menuBar, &SPMenuBar::openRequested, this, [this]() {this->onOpenRequested(""); });
     connect(menuBar, &SPMenuBar::saveRequested, this, &Spectrum::onSaveRequested);
     connect(menuBar, &SPMenuBar::saveAsRequested, this, &Spectrum::onSaveAsRequested);
-    connect(fileIO, &SPFileIO::checkEditorModified, this, [this]() {
-        editor->document()->isModified() ? fileIO->onEditorModified(editor->toPlainText()) : (void)0;
-        });
-
     connect(editor, &SPEditor::openRequest, this, &Spectrum::onOpenRequested);
 }
 
@@ -70,15 +66,51 @@ Spectrum::~Spectrum()
 
 
 void Spectrum::onNewRequested() {
-    fileIO->newFile();
+    if (editor->document()->isModified()) {
+        QMessageBox::StandardButton ret;
+        ret = QMessageBox::warning(nullptr, "ألف",
+            "تم التعديل على الملف.\n"
+            "هل تريد حفظ التغييرات؟",
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        if (ret == QMessageBox::Save) {
+            fileIO->saveFile(editor->document()->toPlainText());
+        }
+        else if (ret == QMessageBox::Discard) {
+            // nothing
+        }
+        else {
+            return;
+        }
+    }
+
     editor->clear();
+    fileIO->newFile();
     editor->document()->setModified(false);
 }
 
 void Spectrum::onOpenRequested(QString filePath) {
+    if (editor->document()->isModified()) {
+        QMessageBox::StandardButton ret;
+        ret = QMessageBox::warning(nullptr, "ألف",
+            "تم التعديل على الملف.\n"
+            "هل تريد حفظ التغييرات؟",
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        if (ret == QMessageBox::Save) {
+            fileIO->saveFile(editor->document()->toPlainText());
+        }
+        else if (ret == QMessageBox::Discard) {
+            // nothing
+        }
+        else {
+            return;
+        }
+    }
+
     QString content = fileIO->openFile(filePath);
-    editor->setPlainText(content);
-    editor->document()->setModified(false);
+    if (content != nullptr) {
+        editor->setPlainText(content);
+        editor->document()->setModified(false);
+    }
 }
 
 void Spectrum::onSaveRequested() {

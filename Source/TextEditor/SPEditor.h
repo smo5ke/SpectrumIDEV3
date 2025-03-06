@@ -39,6 +39,7 @@ private slots:
 
 signals:
     void openRequest(QString filePath);
+
 };
 
 

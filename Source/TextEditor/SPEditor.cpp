@@ -242,3 +242,4 @@ void SPEditor::dragMoveEvent(QDragMoveEvent* event) { // ضروري لمنع ظ�
 void SPEditor::dragLeaveEvent(QDragLeaveEvent* event) {
     event->accept();
 }
+

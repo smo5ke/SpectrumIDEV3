@@ -10,3 +10,4 @@ DerivedData
 *.xopp
 *.DS_Store
 /Spectrum/build
+*.pro.user

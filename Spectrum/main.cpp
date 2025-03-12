@@ -1,16 +1,23 @@
 #include "Spectrum.h"
 #include <QApplication>
+#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     app.setLayoutDirection(Qt::RightToLeft);
-    app.setWindowIcon(QIcon(":/Resources/TaifLogo.ico"));
-    
+
     // لتشغيل ملف ألف بإستخدام محرر طيف عند إختيار المحرر ك برنامج للتشغيل
     QString filePath{};
-    if (app.arguments().count() > 2) return -1;
-    if (app.arguments().count() == 2) filePath = app.arguments().at(1);
+    if (app.arguments().count() > 2) {
+        int ret = QMessageBox::warning(nullptr, "ألف",
+                                       "لا يمكن تمرير أكثر من معامل واحد",
+                                       QMessageBox::Close);
+        return ret;
+    }
+    if (app.arguments().count() == 2) {
+        filePath = app.arguments().at(1);
+    }
 
     Spectrum w(filePath);
     w.show();

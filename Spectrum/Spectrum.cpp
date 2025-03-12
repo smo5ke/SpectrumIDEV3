@@ -28,14 +28,14 @@ Spectrum::Spectrum(const QString& filePath, QWidget *parent)
     vlay->setContentsMargins(0, 0, 0, 0);
     vlay->setSpacing(0);
 
-
     fileIO = new SPFileIO(this);
     editor = new SPEditor(center);
     //terminal = new Terminal(this);
     //folderTree = new FolderTree(editor, this);
     menuBar = new SPMenuBar(this);
     setMenuBar(menuBar);
-    
+
+
     vlay->addWidget(editor);
     //vlay->addWidget(terminal);
 
@@ -48,7 +48,6 @@ Spectrum::Spectrum(const QString& filePath, QWidget *parent)
     if (!filePath.isEmpty()) {
         this->onOpenRequested(filePath);
     }
-
 
     connect(menuBar, &SPMenuBar::newRequested, this, &Spectrum::onNewRequested);
     connect(menuBar, &SPMenuBar::openRequested, this, [this]() {this->onOpenRequested(""); });

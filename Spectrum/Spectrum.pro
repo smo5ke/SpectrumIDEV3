@@ -11,6 +11,9 @@ CONFIG += c++23
 
 TARGET = Spectrum
 
+RESOURCES += \
+    resources.qrc
+
 
 # Include directories
 INCLUDEPATH +=  ../Source/TextEditor \
@@ -38,14 +41,19 @@ HEADERS += \
     Spectrum.h
 
 
+
 # Add the application icon (Windows)
-win32:RC_ICONS += ../Resources/TaifLogo.ico
+win32:RC_ICONS += Resources/TaifLogo.ico
 
 # Add the application icon (macOS/Linux)
-macx:ICON = ../Resources/TaifLogo.icns
-unix:!macx:ICON = ../Resources/TaifLogo.png
+macx:ICON = Resources/TaifLogo.icns
+unix:!macx:ICON = Resources/TaifLogo.png
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+
+
+

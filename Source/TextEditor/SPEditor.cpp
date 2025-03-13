@@ -14,7 +14,7 @@ SPEditor::SPEditor(QWidget* parent) {
     this->setTabStopDistance(32);
     this->setAcceptRichText(true);
     this->setStyleSheet("QTextEdit { background-color: #141520; color: #cccccc;}");
-    this->setFont(QFont("Tajawal", 12, 500));
+    this->setFont(QFont("Tajawal", 14, 500));
 
     setAcceptDrops(true);
 
@@ -77,7 +77,7 @@ int SPEditor::lineNumberAreaWidth() const {
     }
 
     QFont font;
-    font.setPointSize(12);
+    font.setPointSize(14);
     QFontMetrics fm(font);
 
     // Increased width to accommodate line numbers
@@ -127,7 +127,7 @@ void SPEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
 
     // Set font size
     QFont font = painter.font();
-    font.setPointSize(9);
+    font.setPointSize(12);
     painter.setFont(font);
 
     // Get vertical scroll bar value

@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/fonts">
+        <file>Resources/Tajawal/Tajawal-Black.ttf</file>
+        <file>Resources/Tajawal/Tajawal-Bold.ttf</file>
+        <file>Resources/Tajawal/Tajawal-ExtraBold.ttf</file>
+        <file>Resources/Tajawal/Tajawal-ExtraLight.ttf</file>
+        <file>Resources/Tajawal/Tajawal-Light.ttf</file>
+        <file>Resources/Tajawal/Tajawal-Medium.ttf</file>
+        <file>Resources/Tajawal/Tajawal-Regular.ttf</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>Resources/close.png</file>
+        <file>Resources/TaifLogo.icns</file>
+        <file>Resources/TaifLogo.ico</file>
+        <file>Resources/TaifLogo.png</file>
+    </qresource>
+</RCC>

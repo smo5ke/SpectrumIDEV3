@@ -7,6 +7,15 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setLayoutDirection(Qt::RightToLeft);
 
+    int fontId = QFontDatabase::addApplicationFont(":/fonts/Resources/Tajawal/Tajawal-Regular.ttf");
+    if(fontId == -1) {
+        qWarning("لم يستطع تحميل الخط");
+    } else {
+        QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
+        QFont font(family);
+        app.setFont(font);
+    }
+
     // لتشغيل ملف ألف بإستخدام محرر طيف عند إختيار المحرر ك برنامج للتشغيل
     QString filePath{};
     if (app.arguments().count() > 2) {

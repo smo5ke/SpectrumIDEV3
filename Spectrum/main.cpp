@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setLayoutDirection(Qt::RightToLeft);
 
-    int fontId = QFontDatabase::addApplicationFont(":/fonts/Resources/Tajawal/Tajawal-Regular.ttf");
+    int fontId = QFontDatabase::addApplicationFont(":/fonts/Resources/fonts/Tajawal/Tajawal-Regular.ttf");
     if(fontId == -1) {
         qWarning("لم يستطع تحميل الخط");
     } else {

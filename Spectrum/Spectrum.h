@@ -23,15 +23,15 @@ private slots:
     void saveFile();
     void saveFileAs();
 
-private slots:
     void updateWindowTitle();
     void onModificationChanged(bool modified);
 
+private:
+    int needSave();
 
 private:
     SPEditor* editor{};
     SPMenuBar* menuBar{};
 
-private:
-    QString currentFile{};
+    QString currentFilePath{};
 };

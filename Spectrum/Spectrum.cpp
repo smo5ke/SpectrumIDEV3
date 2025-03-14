@@ -65,47 +65,50 @@ Spectrum::~Spectrum()
 {}
 
 
+int Spectrum::needSave() {
+    if (editor->document()->isModified()) {
+        QMessageBox::StandardButton ret{};
+        ret = QMessageBox::warning(nullptr, "ألف",
+                                   "تم التعديل على الملف.\n"
+                                   "هل تريد حفظ التغييرات؟",
+                                   QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        if (ret == QMessageBox::Save) {
+            return 1;
+        }
+        else if (ret == QMessageBox::Cancel) {
+            return 0;
+        }
+    }
 
+    return 2;
+}
 
 
 
 void Spectrum::newFile() {
-    if (editor->document()->isModified()) {
-        QMessageBox::StandardButton ret;
-        ret = QMessageBox::warning(nullptr, "ألف",
-            "تم التعديل على الملف.\n"
-            "هل تريد حفظ التغييرات؟",
-            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        if (ret == QMessageBox::Save) {
-            this->saveFile();
-        }
-        else if (ret == QMessageBox::Cancel) {
-            return;
-        }
+    int isNeedSave = needSave();
+    if (!isNeedSave) {
+        return;
+    }
+    else if (isNeedSave == 1) {
+        this->saveFile();
     }
 
-    currentFile.clear();
-    // editor->clear();
-    editor->document()->setPlainText("");
+    currentFilePath.clear();
+    // editor->clear(); // تجعل الملف الجديد كأنه معدل عليه ولذلك تم إستبدالها بما تحتها الى حين إيجاد الحل
+    editor->document()->setPlainText(""); // مؤقت
     editor->document()->setModified(false);
     updateWindowTitle();
 }
 
 void Spectrum::openFile(QString filePath) {
-    if (editor->document()->isModified()) {
-        QMessageBox::StandardButton ret;
-        ret = QMessageBox::warning(nullptr, "ألف",
-            "تم التعديل على الملف.\n"
-            "هل تريد حفظ التغييرات؟",
-            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        if (ret == QMessageBox::Save) {
-            this->saveFile();
-        }
-        else if (ret == QMessageBox::Cancel) {
-            return;
-        }
+    int isNeedSave = needSave();
+    if (!isNeedSave) {
+        return;
     }
-
+    else if (isNeedSave == 1) {
+        this->saveFile();
+    }
 
     filePath.isEmpty() ? filePath = QFileDialog::getOpenFileName(nullptr, "فتح ملف", "", "ملف ألف (*.alif *.aliflib);;All Files (*)") : filePath;
     if (!filePath.isEmpty()) {
@@ -115,7 +118,7 @@ void Spectrum::openFile(QString filePath) {
             QString content = in.readAll();
             editor->document()->setPlainText(content);
             file.close();
-            currentFile = filePath;
+            currentFilePath = filePath;
         }
         else {
             QMessageBox::warning(nullptr, "خطأ", "لا يمكن فتح الملف");
@@ -128,11 +131,11 @@ void Spectrum::openFile(QString filePath) {
 
 void Spectrum::saveFile() {
     QString content = editor->document()->toPlainText();
-    if (currentFile.isEmpty()) {
+    if (currentFilePath.isEmpty()) {
         saveFileAs();
     }
     else {
-        QFile file(currentFile);
+        QFile file(currentFilePath);
         if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             QTextStream out(&file);
             out << content;
@@ -156,7 +159,7 @@ void Spectrum::saveFileAs() {
             QTextStream out(&file);
             out << content;
             file.close();
-            currentFile = fileName;
+            currentFilePath = fileName;
             editor->document()->setModified(false);
             updateWindowTitle();
         }
@@ -169,10 +172,10 @@ void Spectrum::saveFileAs() {
 
 void Spectrum::updateWindowTitle() {
     QString title{};
-    if (currentFile.isEmpty()) {
+    if (currentFilePath.isEmpty()) {
         title = "غير معنون[*]";
     } else {
-        title = QFileInfo(currentFile).fileName() + "[*]";
+        title = QFileInfo(currentFilePath).fileName() + "[*]";
     }
     title += " - طيف";
     setWindowTitle(title);

@@ -22,7 +22,6 @@ INCLUDEPATH +=  ../Source/TextEditor \
                 ../Source/MenuBar
 
 SOURCES += \
-    ../Source/Functions/SPFileIO.cpp \
     ../Source/Lexer/AlifComplete.cpp \
     ../Source/Lexer/AlifLexer.cpp \
     ../Source/MenuBar/SPMenu.cpp \
@@ -32,7 +31,6 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
-    ../Source/Functions/SPFileIO.h \
     ../Source/Lexer/AlifComplete.h \
     ../Source/Lexer/AlifLexer.h \
     ../Source/MenuBar/SPMenu.h \

@@ -5,7 +5,6 @@
 //#include "SPTerminal.h"
 #include "SPHighlighter.h"
 #include "SPMenu.h"
-#include "SPFileIO.h"
 
 #include <QMainWindow>
 
@@ -18,17 +17,21 @@ public:
     Spectrum(const QString& filePath = "", QWidget* parent = nullptr);
     ~Spectrum();
 
-
+private slots:
+    void newFile();
+    void openFile(QString);
+    void saveFile();
+    void saveFileAs();
 
 private slots:
-    void onNewRequested();
-    void onOpenRequested(QString filePath);
-    void onSaveRequested();
-    void onSaveAsRequested();
+    void updateWindowTitle();
+    void onModificationChanged(bool modified);
 
 
 private:
     SPEditor* editor{};
     SPMenuBar* menuBar{};
-    SPFileIO* fileIO{};
+
+private:
+    QString currentFile{};
 };

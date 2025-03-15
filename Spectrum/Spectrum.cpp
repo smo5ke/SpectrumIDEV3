@@ -12,7 +12,7 @@ Spectrum::Spectrum(const QString& filePath, QWidget *parent)
     : QMainWindow(parent)
 {
     QScreen* screenSize = QGuiApplication::primaryScreen();
-    this->setGeometry(screenSize->size().width() / 3, screenSize->size().height() / 7, 500, 600);
+    this->setGeometry(screenSize->size().width() / 3, screenSize->size().height() / 7, 600, 700);
     setStyleSheet(R"(
             QMainWindow::separator {
                 background-color: #2a2c44;
@@ -29,7 +29,7 @@ Spectrum::Spectrum(const QString& filePath, QWidget *parent)
     vlay->setContentsMargins(0, 0, 0, 0);
     vlay->setSpacing(0);
 
-    editor = new SPEditor(center);
+    editor = new SPEditor(this);
     //terminal = new Terminal(this);
     //folderTree = new FolderTree(editor, this);
     menuBar = new SPMenuBar(this);
@@ -62,7 +62,11 @@ Spectrum::Spectrum(const QString& filePath, QWidget *parent)
 }
 
 Spectrum::~Spectrum()
-{}
+{
+    delete editor;
+    delete menuBar;
+}
+
 
 
 int Spectrum::needSave() {
@@ -119,14 +123,19 @@ void Spectrum::openFile(QString filePath) {
             editor->document()->setPlainText(content);
             file.close();
             currentFilePath = filePath;
+            editor->document()->setModified(false);
+            updateWindowTitle();
+
+            // حل مؤقت لارجاع المؤشرة الى بداية الملف حيث أنه يجب أن تظهر في البداية بشكل إفتراضي
+            QTextCursor cursor = editor->textCursor();
+            cursor.setPosition(0);
+            editor->setTextCursor(cursor);
         }
         else {
             QMessageBox::warning(nullptr, "خطأ", "لا يمكن فتح الملف");
         }
     }
 
-    editor->document()->setModified(false);
-    updateWindowTitle();
 }
 
 void Spectrum::saveFile() {

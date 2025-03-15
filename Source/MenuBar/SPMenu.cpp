@@ -16,7 +16,7 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
         }
 
         QMenuBar::item {
-            padding: 5px 9px;
+            padding: 3px 7px;
             background: transparent;
             border-radius: 3px;
         }
@@ -69,11 +69,15 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
         QMenu {
             color: #dddddd;
             background-color: #1e202e;
-            border: 1px solid #dddddd;
+            border-bottom: 1px solid #10a8f4;
+            border-left: 1px solid #10a8f4;
             border-radius: 10px 10px 10px 10px;
         }
         QMenu::item {
-            border: 7px solid transparent;
+            border: 5px solid transparent;
+        }
+        QMenu::item:selected {
+            margin-left: 3px;
         }
         QMenu::separator {
             height: 1px;

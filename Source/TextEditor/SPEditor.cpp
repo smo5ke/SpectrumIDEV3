@@ -12,7 +12,7 @@
 SPEditor::SPEditor(QWidget* parent) {
 
     this->setTabStopDistance(32);
-    this->setAcceptRichText(true);
+    this->setAcceptRichText(false);
     this->setStyleSheet("QTextEdit { background-color: #141520; color: #cccccc;}");
     this->setFont(QFont("Tajawal", 12, 500));
 
@@ -77,7 +77,7 @@ int SPEditor::lineNumberAreaWidth() const {
     }
 
     QFont font;
-    font.setPointSize(11);
+    font.setPointSize(10);
     QFontMetrics fm(font);
 
     // Increased width to accommodate line numbers
@@ -88,8 +88,8 @@ int SPEditor::lineNumberAreaWidth() const {
 void SPEditor::updateLineNumberAreaWidth(int /* newBlockCount */) {
     int width = lineNumberAreaWidth();
 
-    // Set viewport margins to create space for line number area on the RIGHT
-    setViewportMargins(0, 0, width, 0);
+    // Set viewport margins to create space for line number area on the Left
+    setViewportMargins(0, 0, width + 10, 0);
 
     // Adjust cursor position
     QTextCursor cursor = textCursor();
@@ -106,7 +106,7 @@ void SPEditor::resizeEvent(QResizeEvent* event) {
     QTextEdit::resizeEvent(event);
 
     QRect cr = contentsRect();
-    // Position line number area on the RIGHT
+    // Position line number area on the Left
     lineNumberArea->setGeometry(QRect(
         cr.right() - lineNumberAreaWidth(),
         cr.top(),
@@ -122,12 +122,17 @@ void SPEditor::resizeEvent(QResizeEvent* event) {
 void SPEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
     QPainter painter(lineNumberArea);
 
-    // Background color
-    painter.fillRect(event->rect(), QColor("#141520"));
+    lineNumberArea->setStyleSheet(
+        "QWidget {"
+        "   border-left: 1px solid #10a8f4;"
+        "   border-top-left-radius: 9px;"        // Rounded top-left corner
+        "   border-bottom-left-radius: 9px;"     // Rounded bottom-left corner
+        "}"
+        );
 
     // Set font size
     QFont font = QFont("KawkabMono");
-    font.setPointSize(11);
+    font.setPointSize(10);
     painter.setFont(font);
 
     // Get vertical scroll bar value
@@ -150,8 +155,8 @@ void SPEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
         if (blockTop + blockRect.height() >= 0 && blockTop <= height()) {
             QString number = QString::number(blockNumber + 1);
 
-            // Number color #dddddd
-            painter.setPen(QColor(221, 221, 221));
+            // Number color
+            painter.setPen(QColor(200, 200, 200));
 
             // Calculate text width
             painter.drawText(12, blockTop, lineNumberArea->width() - 12,

@@ -2,7 +2,6 @@
 
 #include "SPHighlighter.h"
 #include "AlifComplete.h"
-#include <QTextEdit>
 
 
 class LineNumberArea;
@@ -15,8 +14,6 @@ public:
 
     void lineNumberAreaPaintEvent(QPaintEvent* event);
     int lineNumberAreaWidth() const;
-    QTextBlock firstVisibleBlock() const;
-    QRect blockBoundingRect(const QTextBlock& block) const;
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
@@ -29,12 +26,11 @@ protected:
 
 private:
     SyntaxHighlighter* highlighter{};
-    LineNumberArea* lineNumberArea{};
     AutoComplete* autoComplete{};
+    LineNumberArea* lineNumberArea{};
 
 private slots:
-    void updateLineNumberAreaWidth(int newBlockCount);
-    void updateLineNumberArea();
+    void updateLineNumberAreaWidth();
 
 
 signals:

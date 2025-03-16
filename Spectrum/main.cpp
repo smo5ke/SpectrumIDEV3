@@ -1,4 +1,5 @@
 #include "Spectrum.h"
+
 #include <QApplication>
 #include <QMessageBox>
 
@@ -13,7 +14,7 @@ int main(int argc, char *argv[])
     } else {
         QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
         QFont font(family);
-        font.setPixelSize(14);
+        font.setPixelSize(16);
         app.setFont(font);
     }
 

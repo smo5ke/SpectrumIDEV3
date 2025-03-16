@@ -1,12 +1,9 @@
 #include "AlifComplete.h"
-#include <QKeyEvent>
-#include <QTextCursor>
+
 #include <QVBoxLayout>
 
 AutoComplete::AutoComplete(QTextEdit* editor, QObject* parent)
-    : QObject(parent), editor(editor)
-{
-    // Set some example keywords
+    : QObject(parent), editor(editor) {
     keywords = {
         "اطبع", "اواذا", "لاجل", "لأجل", "استمر", "استورد", "ارجع", "اذا", "احذف", "ادخل",
         "أوإذا", "إذا",
@@ -17,9 +14,8 @@ AutoComplete::AutoComplete(QTextEdit* editor, QObject* parent)
         "صنف", "صح",
         "عدم",
         "ليس",
-        "مرر",
+        "مرر", "مدى",
         "والا", "وإلا", 
-        "مدى", 
         "هذا",
         "_تهيئة_",
     };
@@ -42,7 +38,7 @@ AutoComplete::AutoComplete(QTextEdit* editor, QObject* parent)
 
 
 bool AutoComplete::eventFilter(QObject* obj, QEvent* event) {
-    if (obj == editor && event->type() == QEvent::KeyPress) {
+    if (obj == editor and event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
         if (popup->isVisible()) {
             switch (keyEvent->key()) {
@@ -74,7 +70,7 @@ QString AutoComplete::getCurrentWord() const
 
 void AutoComplete::showCompletion() {
     QString currentWord = getCurrentWord();
-    if (currentWord.isEmpty() || currentWord.length() < 1) {
+    if (currentWord.isEmpty() or currentWord.length() < 1) {
         hidePopup();
         return;
     }
@@ -103,7 +99,7 @@ void AutoComplete::showPopup() {
     QPoint pos = editor->viewport()->mapToGlobal(rect.bottomLeft());
 
     // Set the minimum width of the popup
-    popup->setFixedSize(128, 64);
+    popup->setFixedSize(256, 128);
     int popupWidth = popup->width();
     int popupHeight = popup->height();
 
@@ -132,7 +128,7 @@ void AutoComplete::showPopup() {
     popup->show();
 }
 
-void AutoComplete::hidePopup() {
+inline void AutoComplete::hidePopup() {
     popup->hide();
 }
 

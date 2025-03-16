@@ -1,11 +1,5 @@
 #include "SPMenu.h"
 
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QShortcut>
-#include <QModelIndex>
-
-
 SPMenuBar::SPMenuBar(QWidget* parent) {
 
     parent->setStyleSheet(R"(
@@ -32,13 +26,13 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
 
     QMenu* fileMenu = addMenu("ملف");
     //QMenu* editMenu = addMenu("تحرير");
-    //QMenu* runMenu = addMenu("تشغيل");
-    //QMenu* helpMenu = addMenu("مساعدة");
+    QMenu* runMenu = addMenu("تشغيل");
+    QMenu* helpMenu = addMenu("مساعدة");
 
     fileMenu->setMinimumWidth(200);
     //editMenu->setMinimumWidth(200);
-    //runMenu->setMinimumWidth(200);
-    //helpMenu->setMinimumWidth(200);
+    runMenu->setMinimumWidth(200);
+    helpMenu->setMinimumWidth(200);
 
     //QAction* folderAction = new QAction("فتح مجلد", parent);
     QAction* newAction = new QAction("جديد", parent);
@@ -48,7 +42,9 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
     //QAction* optionsAction = new QAction("خيارات", parent);
     //QAction* exitAction = new QAction("خروج", parent);
 
-    //QAction* aboutAction = new QAction("عن المحرر", parent);
+    QAction* runAction = new QAction("تشغيل", parent);
+
+    QAction* aboutAction = new QAction("عن المحرر", parent);
 
 
     //fileMenu->addAction(folderAction);
@@ -62,7 +58,9 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
     //fileMenu->addSeparator();
     //fileMenu->addAction(exitAction);
 
-    //helpMenu->addAction(aboutAction);
+    runMenu->addAction(runAction);
+
+    helpMenu->addAction(aboutAction);
 
 
     QString style = R"(
@@ -92,14 +90,9 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
 )";
     fileMenu->setStyleSheet(style);
     //editMenu->setStyleSheet(style);
-    //runMenu->setStyleSheet(style);
-    //helpMenu->setStyleSheet(style);
+    runMenu->setStyleSheet(style);
+    helpMenu->setStyleSheet(style);
 
-
-
-    // Create a shortcut for Ctrl+S
-    QShortcut* saveShortcut = new QShortcut(QKeySequence::Save, this);
-    connect(saveShortcut, &QShortcut::activated, this, &SPMenuBar::onSaveAction);
 
     connect(newAction, &QAction::triggered, this, &SPMenuBar::onNewAction);
     connect(openAction, &QAction::triggered, this, &SPMenuBar::onOpenAction);

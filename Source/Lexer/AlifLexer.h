@@ -27,7 +27,7 @@ public:
 
 class Lexer {
 public:
-    QVector<Token> tokenize(const QString text);
+    QVector<Token> tokenize(const QString& text);
 
 private:
     QVector<Token> tokens{};

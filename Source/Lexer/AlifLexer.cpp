@@ -1,11 +1,9 @@
 #include "AlifLexer.h"
+
 #include <QString>
-#include <QVector>
-#include <QSet>
-#include <QChar>
 
 
-QVector<Token> Lexer::tokenize(const QString text) {
+QVector<Token> Lexer::tokenize(const QString& text) {
     while (pos < text.length()) {
         QChar currentChar = text[pos];
 

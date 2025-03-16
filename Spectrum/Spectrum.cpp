@@ -2,15 +2,13 @@
 
 #include <QDockWidget>
 #include <QVBoxLayout>
-#include <QScreen>
-#include <QShortcut>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QShortcut>
 
 
 Spectrum::Spectrum(const QString& filePath, QWidget *parent)
-    : QMainWindow(parent)
-{
+    : QMainWindow(parent) {
     QScreen* screenSize = QGuiApplication::primaryScreen();
     this->setGeometry(screenSize->size().width() / 3, screenSize->size().height() / 7, 600, 700);
     setStyleSheet(R"(
@@ -50,6 +48,10 @@ Spectrum::Spectrum(const QString& filePath, QWidget *parent)
         this->openFile(filePath);
     }
 
+    // Create a shortcut for Ctrl+S
+    QShortcut* saveShortcut = new QShortcut(QKeySequence::Save, this);
+    connect(saveShortcut, &QShortcut::activated, this, &Spectrum::saveFile);
+
     connect(menuBar, &SPMenuBar::newRequested, this, &Spectrum::newFile);
     connect(menuBar, &SPMenuBar::openRequested, this, [this](){this->openFile("");});
     connect(menuBar, &SPMenuBar::saveRequested, this, &Spectrum::saveFile);
@@ -61,8 +63,7 @@ Spectrum::Spectrum(const QString& filePath, QWidget *parent)
             this, &Spectrum::onModificationChanged);
 }
 
-Spectrum::~Spectrum()
-{
+Spectrum::~Spectrum() {
     delete editor;
     delete menuBar;
 }

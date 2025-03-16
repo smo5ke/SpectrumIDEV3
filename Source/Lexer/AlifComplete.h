@@ -27,5 +27,5 @@ private:
 
     QString getCurrentWord() const;
     void showPopup();
-    void hidePopup();
+    inline void hidePopup();
 };

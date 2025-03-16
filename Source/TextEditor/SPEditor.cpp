@@ -1,22 +1,16 @@
-#include "SPHighlighter.h"
 #include "SPEditor.h"
 
 #include <QPainter>
-#include <QAbstractTextDocumentLayout>
-#include <QRect>
 #include <QTextBlock>
 #include <QScrollBar>
 #include <QMimeData>
 
-
 SPEditor::SPEditor(QWidget* parent) {
 
-    this->setTabStopDistance(32);
+    setAcceptDrops(true);
     this->setAcceptRichText(false);
     this->setStyleSheet("QTextEdit { background-color: #141520; color: #cccccc;}");
-    this->setFont(QFont("Tajawal", 12, 500));
-
-    setAcceptDrops(true);
+    this->setTabStopDistance(32);
 
     // set "force" cursor and text direction from right to left
     QTextDocument* editorDocument = this->document();
@@ -24,49 +18,32 @@ SPEditor::SPEditor(QWidget* parent) {
     option.setTextDirection(Qt::RightToLeft);
     editorDocument->setDefaultTextOption(option);
 
-    SyntaxHighlighter* highlighter = new SyntaxHighlighter(editorDocument);
-
+    highlighter = new SyntaxHighlighter(editorDocument);
     autoComplete = new AutoComplete(this, parent);
-
     lineNumberArea = new LineNumberArea(this);
+
+    updateLineNumberAreaWidth();
     connect(this, &QTextEdit::textChanged, this, [this]() {
-        updateLineNumberAreaWidth(0);
-        updateLineNumberArea();
-        });
-    connect(verticalScrollBar(), &QScrollBar::valueChanged,
-        this, &SPEditor::updateLineNumberArea);
+        updateLineNumberAreaWidth();
+    });
 
     // Handle special key events
-    installEventFilter(this);
-
-    updateLineNumberAreaWidth(0);
+    installEventFilter(this); // for SHIFT + ENTER it's make line without number
 }
 
-
 bool SPEditor::eventFilter(QObject* obj, QEvent* event) {
-    if (obj == this && event->type() == QEvent::KeyPress) {
+    if (obj == this and event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
         // Handle Shift+Return or Shift+Enter
-        if ((keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)
-            && (keyEvent->modifiers() & Qt::ShiftModifier)) {
-
-            // Insert new line
-            QTextCursor cursor = textCursor();
-            cursor.insertText("\n");
-
-            // Trigger updates
-            updateLineNumberAreaWidth(0);
-            updateLineNumberArea();
-
+        if ((keyEvent->key() == Qt::Key_Return or keyEvent->key() == Qt::Key_Enter)
+            and (keyEvent->modifiers() & Qt::ShiftModifier)) {
             return true; // Event handled
         }
     }
 
     return QTextEdit::eventFilter(obj, event);
 }
-
-
 
 int SPEditor::lineNumberAreaWidth() const {
     int digits = 1;
@@ -76,41 +53,32 @@ int SPEditor::lineNumberAreaWidth() const {
         ++digits;
     }
 
-    QFont font;
-    font.setPointSize(10);
+    QFont font{};
+    font.setPointSize(10); // most be same lineNumberAreaPaintEvent() font PointSize
     QFontMetrics fm(font);
 
     // Increased width to accommodate line numbers
-    int space = 18 + fm.horizontalAdvance(QLatin1Char('9')) * digits;
+    int space = 21 + fm.horizontalAdvance(QLatin1Char('9')) * digits;
     return space;
 }
 
-void SPEditor::updateLineNumberAreaWidth(int /* newBlockCount */) {
+void SPEditor::updateLineNumberAreaWidth() {
     int width = lineNumberAreaWidth();
 
     // Set viewport margins to create space for line number area on the Left
     setViewportMargins(0, 0, width + 10, 0);
-
-    // Adjust cursor position
-    QTextCursor cursor = textCursor();
-    cursor.clearSelection();
-    setTextCursor(cursor);
-}
-
-void SPEditor::updateLineNumberArea() {
-    // Trigger a repaint of the line number area
-    lineNumberArea->update();
 }
 
 void SPEditor::resizeEvent(QResizeEvent* event) {
     QTextEdit::resizeEvent(event);
 
     QRect cr = contentsRect();
+    int areaWidth = lineNumberAreaWidth();
     // Position line number area on the Left
     lineNumberArea->setGeometry(QRect(
-        cr.right() - lineNumberAreaWidth(),
+        cr.right() - areaWidth,
         cr.top(),
-        lineNumberAreaWidth(),
+        areaWidth,
         cr.height()
     ));
 }
@@ -151,59 +119,25 @@ void SPEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
         // Calculate the vertical position of the block
         int blockTop = qRound(blockRect.top() - scrollValue);
 
-        // Check if block is within the visible area
-        if (blockTop + blockRect.height() >= 0 && blockTop <= height()) {
-            QString number = QString::number(blockNumber + 1);
+        QString number = QString::number(blockNumber + 1);
 
-            // Number color
-            painter.setPen(QColor(200, 200, 200));
+        // Number color
+        painter.setPen(QColor(200, 200, 200));
 
-            // Calculate text width
-            painter.drawText(12, blockTop, lineNumberArea->width() - 12,
-                fontMetrics().height(),
-                Qt::AlignRight | Qt::AlignVCenter, number);
-        }
+        // Calculate text width
+        painter.drawText(12, blockTop, lineNumberArea->width(),
+            fontMetrics().height(),
+            Qt::AlignRight | Qt::AlignVCenter, number);
 
         block = block.next();
         ++blockNumber;
     }
 }
 
-QTextBlock SPEditor::firstVisibleBlock() const {
-    // Get the vertical scroll bar value
-    int scrollValue = verticalScrollBar()->value();
-
-    // Iterate through blocks to find the first visible block
-    QTextBlock block = document()->begin();
-    while (block.isValid()) {
-        QRect rect = cursorRect(QTextCursor(block));
-
-        // Check if this block is below the scroll position
-        if (rect.top() >= scrollValue) {
-            return block;
-        }
-
-        block = block.next();
-    }
-
-    // Fallback to first block if no block is found
-    return document()->begin();
-}
-
-QRect SPEditor::blockBoundingRect(const QTextBlock& block) const {
-    QTextLayout* layout = block.layout();
-    if (layout) {
-        return QRect(0, layout->position().y(),
-            viewport()->width(),
-            layout->boundingRect().height());
-    }
-    return QRect();
-}
 
 
 
-
-
+/* ---------------------------------- Drag and Drop ---------------------------------- */
 
 void SPEditor::dragEnterEvent(QDragEnterEvent* event) {
     // Check if the dragged data contains URLs (files)
@@ -226,12 +160,12 @@ void SPEditor::dropEvent(QDropEvent* event) {
     if (event->mimeData()->hasUrls()) {
         for (const QUrl& url : event->mimeData()->urls()) {
             if (url.fileName().endsWith(".alif", Qt::CaseInsensitive) or
-                url.fileName().endsWith(".aliflib", Qt::CaseInsensitive) or 
+                url.fileName().endsWith(".aliflib", Qt::CaseInsensitive) or
                 url.fileName().endsWith(".txt", Qt::CaseInsensitive)) {
-                
+
                 QString filePath = url.toLocalFile();
                 emit openRequest(filePath);
-                
+
                 event->acceptProposedAction();
                 return;
             }

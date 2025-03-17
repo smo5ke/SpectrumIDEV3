@@ -192,6 +192,7 @@ void Spectrum::runAlif() {
     QStringList args{};
     QString command{};
     QStringList arguments{currentFilePath};
+    QString workingDirectory = QCoreApplication::applicationDirPath();
 
     if (currentFilePath.isEmpty()) {
         QMessageBox::warning(nullptr, "تنبيه", "قم بحفظ الملف لتشغيله");
@@ -206,13 +207,13 @@ void Spectrum::runAlif() {
 #elif defined(Q_OS_LINUX)
     // Linux: Use x-terminal-emulator with -e to execute the command
     program = "x-terminal-emulator";
-    command = "alif/alif.exe";
+    command = "./alif/alif";
     args << "-e" << command;
     args += arguments;
 #elif defined(Q_OS_MACOS)
     // macOS: Use AppleScript to run the command in Terminal.app
     program = "osascript";
-    command = "alif/alif.exe";
+    command = "./alif/alif";
 
     // Escape each part for shell execution
     QStringList allParts = QStringList() << command << arguments;
@@ -231,9 +232,9 @@ void Spectrum::runAlif() {
     QString script = QString(
                          "tell application \"Terminal\"\n"
                          "    activate\n"
-                         "    do script \"%1\"\n"
+                         "    do script \"cd '%1' && %2\"\n"
                          "end tell"
-                         ).arg(escapedAppleScriptCommand);
+                         ).arg(workingDirectory, escapedAppleScriptCommand);
 
     args << "-e" << script;
 #endif

@@ -40,7 +40,15 @@ signals:
 
 class LineNumberArea : public QWidget {
 public:
-    LineNumberArea(SPEditor* editor) : QWidget(editor), spEditor(editor) {}
+    LineNumberArea(SPEditor* editor) : QWidget(editor), spEditor(editor) {
+        this->setStyleSheet(
+            "QWidget {"
+            "   border-left: 1px solid #10a8f4;"
+            "   border-top-left-radius: 9px;"        // Rounded top-left corner
+            "   border-bottom-left-radius: 9px;"     // Rounded bottom-left corner
+            "}"
+        );
+    }
 
     QSize sizeHint() const override {
         return QSize(spEditor->lineNumberAreaWidth(), height());

@@ -244,10 +244,8 @@ void Spectrum::runAlif() {
     args << "-e" << script;
 #endif
 
-
     QProcess* process = new QProcess(this);
     process->setWorkingDirectory(workingDirectory);
-
 
     process->start(program, args);
 }

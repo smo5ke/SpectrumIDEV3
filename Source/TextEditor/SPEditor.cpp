@@ -90,14 +90,6 @@ void SPEditor::resizeEvent(QResizeEvent* event) {
 void SPEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
     QPainter painter(lineNumberArea);
 
-    lineNumberArea->setStyleSheet(
-        "QWidget {"
-        "   border-left: 1px solid #10a8f4;"
-        "   border-top-left-radius: 9px;"        // Rounded top-left corner
-        "   border-bottom-left-radius: 9px;"     // Rounded bottom-left corner
-        "}"
-        );
-
     // Set font size
     QFont font = QFont("KawkabMono");
     font.setPointSize(10);
@@ -132,6 +124,7 @@ void SPEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
         block = block.next();
         ++blockNumber;
     }
+
 }
 
 

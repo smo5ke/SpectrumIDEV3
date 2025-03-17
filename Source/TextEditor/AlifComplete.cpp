@@ -43,7 +43,7 @@ bool AutoComplete::eventFilter(QObject* obj, QEvent* event) {
         if (popup->isVisible()) {
             switch (keyEvent->key()) {
             case Qt::Key_Tab:
-            case Qt::Key_Enter:
+            case Qt::Key_Return:
                 insertCompletion();
                 return true;
             case Qt::Key_Escape:

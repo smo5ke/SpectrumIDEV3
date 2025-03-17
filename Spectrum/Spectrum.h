@@ -22,6 +22,8 @@ private slots:
     void saveFile();
     void saveFileAs();
 
+    void runAlif();
+
     void updateWindowTitle();
     void onModificationChanged(bool modified);
 

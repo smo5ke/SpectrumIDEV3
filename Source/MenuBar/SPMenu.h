@@ -3,6 +3,7 @@
 #include <QMenuBar>
 #include <QFileSystemModel>
 #include <QTreeView>
+#include <QProcess>
 
 
 
@@ -18,6 +19,7 @@ signals:
     void openRequested();
     void saveRequested();
     void saveAsRequested();
+    void runRequested();
 
 private slots:
     void onNewAction() {
@@ -31,5 +33,8 @@ private slots:
     }
     void onSaveAsAction() {
         emit saveAsRequested();
+    }
+    void onRunAction() {
+        emit runRequested();
     }
 };

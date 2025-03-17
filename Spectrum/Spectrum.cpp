@@ -56,7 +56,9 @@ Spectrum::Spectrum(const QString& filePath, QWidget *parent)
     connect(menuBar, &SPMenuBar::openRequested, this, [this](){this->openFile("");});
     connect(menuBar, &SPMenuBar::saveRequested, this, &Spectrum::saveFile);
     connect(menuBar, &SPMenuBar::saveAsRequested, this, &Spectrum::saveFileAs);
+    connect(menuBar, &SPMenuBar::runRequested, this, &Spectrum::runAlif);
     connect(editor, &SPEditor::openRequest, this, [this](QString filePath){this->openFile(filePath);});
+
 
     // Connect modification signal so when doc modified it's add "*"
     connect(editor->document(), &QTextDocument::modificationChanged,
@@ -69,6 +71,7 @@ Spectrum::~Spectrum() {
 }
 
 
+/* ----------------------------------- File Menu Button ----------------------------------- */
 
 int Spectrum::needSave() {
     if (editor->document()->isModified()) {
@@ -87,8 +90,6 @@ int Spectrum::needSave() {
 
     return 2;
 }
-
-
 
 void Spectrum::newFile() {
     int isNeedSave = needSave();
@@ -180,6 +181,71 @@ void Spectrum::saveFileAs() {
 }
 
 
+
+
+
+
+/* ----------------------------------- Run Menu Button ----------------------------------- */
+
+void Spectrum::runAlif() {
+    QString program{};
+    QStringList args{};
+    QString command{};
+    QStringList arguments{currentFilePath};
+
+    if (currentFilePath.isEmpty()) {
+        QMessageBox::warning(nullptr, "تنبيه", "قم بحفظ الملف لتشغيله");
+        return;
+    }
+
+#if defined(Q_OS_WINDOWS)
+    // Windows: Start cmd.exe with /K to keep the window open
+    program = "cmd.exe";
+    command = "alif\\alif.exe";
+    args << "/C" << "start" << program << "/K" << command << arguments;
+#elif defined(Q_OS_LINUX)
+    // Linux: Use x-terminal-emulator with -e to execute the command
+    program = "x-terminal-emulator";
+    command = "alif/alif.exe";
+    args << "-e" << command;
+    args += arguments;
+#elif defined(Q_OS_MACOS)
+    // macOS: Use AppleScript to run the command in Terminal.app
+    program = "osascript";
+    command = "alif/alif.exe";
+
+    // Escape each part for shell execution
+    QStringList allParts = QStringList() << command << arguments;
+    QStringList escapedShellParts;
+    for (const QString &part : allParts) {
+        QString escaped = part;
+        escaped.replace("'", "'\"'\"'"); // Escape single quotes for AppleScript
+        escapedShellParts << "'" + escaped + "'";
+    }
+    QString shellCommand = escapedShellParts.join(" ");
+
+    // Escape double quotes for AppleScript
+    QString escapedAppleScriptCommand = shellCommand.replace("\"", "\\\"");
+
+    // Construct AppleScript
+    QString script = QString(
+                         "tell application \"Terminal\"\n"
+                         "    activate\n"
+                         "    do script \"%1\"\n"
+                         "end tell"
+                         ).arg(escapedAppleScriptCommand);
+
+    args << "-e" << script;
+#endif
+
+    QProcess::startDetached(program, args);
+}
+
+
+
+
+/* ----------------------------------- Other Functions ----------------------------------- */
+
 void Spectrum::updateWindowTitle() {
     QString title{};
     if (currentFilePath.isEmpty()) {
@@ -194,6 +260,8 @@ void Spectrum::updateWindowTitle() {
 void Spectrum::onModificationChanged(bool modified) {
     this->setWindowModified(modified);
 }
+
+
 
 
 

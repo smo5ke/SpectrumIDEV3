@@ -17,26 +17,24 @@ RESOURCES += \
 
 # Include directories
 INCLUDEPATH +=  ../Source/TextEditor \
-                ../Source/Functions \
-                ../Source/Lexer \
                 ../Source/MenuBar
 
 SOURCES += \
-    ../Source/Lexer/AlifComplete.cpp \
-    ../Source/Lexer/AlifLexer.cpp \
-    ../Source/MenuBar/SPMenu.cpp \
+    Spectrum.cpp \
+    main.cpp     \
+    ../Source/TextEditor/AlifComplete.cpp \
+    ../Source/TextEditor/AlifLexer.cpp \
     ../Source/TextEditor/SPEditor.cpp \
     ../Source/TextEditor/SPHighlighter.cpp \
-    Spectrum.cpp \
-    main.cpp
+    ../Source/MenuBar/SPMenu.cpp
 
 HEADERS += \
-    ../Source/Lexer/AlifComplete.h \
-    ../Source/Lexer/AlifLexer.h \
-    ../Source/MenuBar/SPMenu.h \
+    Spectrum.h  \
+    ../Source/TextEditor/AlifComplete.h \
+    ../Source/TextEditor/AlifLexer.h \
     ../Source/TextEditor/SPEditor.h \
     ../Source/TextEditor/SPHighlighter.h \
-    Spectrum.h
+    ../Source/MenuBar/SPMenu.h
 
 
 

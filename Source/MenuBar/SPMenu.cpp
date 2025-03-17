@@ -12,7 +12,7 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
         QMenuBar::item {
             padding: 3px 7px;
             background: transparent;
-            border-radius: 3px;
+            border-radius: 1px;
         }
 
         QMenuBar::item:selected { /* when selected using mouse or keyboard */
@@ -69,7 +69,7 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
             background-color: #1e202e;
             border-bottom: 1px solid #10a8f4;
             border-left: 1px solid #10a8f4;
-            border-radius: 10px 10px 10px 10px;
+            border-radius: 3px;
         }
         QMenu::item {
             border: 5px solid transparent;
@@ -98,6 +98,8 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
     connect(openAction, &QAction::triggered, this, &SPMenuBar::onOpenAction);
     connect(saveAction, &QAction::triggered, this, &SPMenuBar::onSaveAction);
     connect(saveAsAction, &QAction::triggered, this, &SPMenuBar::onSaveAsAction);
+
+    connect(runAction, &QAction::triggered, this, &SPMenuBar::onRunAction);
 }
 
 

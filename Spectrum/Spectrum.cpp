@@ -139,7 +139,6 @@ void Spectrum::openFile(QString filePath) {
             QMessageBox::warning(nullptr, "خطأ", "لا يمكن فتح الملف");
         }
     }
-
 }
 
 void Spectrum::saveFile() {
@@ -196,7 +195,7 @@ void Spectrum::runAlif() {
     QStringList arguments{currentFilePath};
     QString workingDirectory = QCoreApplication::applicationDirPath();
 
-    if (currentFilePath.isEmpty()) {
+    if (currentFilePath.isEmpty() or editor->document()->isModified()) {
         QMessageBox::warning(nullptr, "تنبيه", "قم بحفظ الملف لتشغيله");
         return;
     }

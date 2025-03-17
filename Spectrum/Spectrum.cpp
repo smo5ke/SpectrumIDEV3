@@ -116,7 +116,9 @@ void Spectrum::openFile(QString filePath) {
         this->saveFile();
     }
 
-    filePath.isEmpty() ? filePath = QFileDialog::getOpenFileName(nullptr, "فتح ملف", "", "ملف ألف (*.alif *.aliflib);;All Files (*)") : filePath;
+    if (filePath.isEmpty()) {
+        filePath = QFileDialog::getOpenFileName(nullptr, "فتح ملف", "", "ملف ألف (*.alif *.aliflib);;All Files (*)");
+    }
     if (!filePath.isEmpty()) {
         QFile file(filePath);
         if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -208,8 +210,11 @@ void Spectrum::runAlif() {
     // Linux: Use x-terminal-emulator with -e to execute the command
     program = "x-terminal-emulator";
     command = "./alif/alif";
-    args << "-e" << command;
-    args += arguments;
+    if (!arguments.isEmpty()) {
+        command += " " + arguments.join(" ");
+    }
+    command += "; exec bash";
+    args << "-e" << "bash" << "-c" << command;
 #elif defined(Q_OS_MACOS)
     // macOS: Use AppleScript to run the command in Terminal.app
     program = "osascript";
@@ -239,7 +244,12 @@ void Spectrum::runAlif() {
     args << "-e" << script;
 #endif
 
-    QProcess::startDetached(program, args);
+
+    QProcess* process = new QProcess(this);
+    process->setWorkingDirectory(workingDirectory);
+
+
+    process->start(program, args);
 }
 
 

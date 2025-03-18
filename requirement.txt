@@ -1,5 +1,6 @@
 Windows:
 
+  file exe(execution) found in ..\SpectrumIDEV3\Spectrum Package\Windows
 
 Linux:
  sudo apt install libxcb-cursor0 libxcb-cusor-dev // for qt   online installer

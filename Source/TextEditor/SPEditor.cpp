@@ -91,7 +91,7 @@ void SPEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
     QPainter painter(lineNumberArea);
 
     // Set font size
-    QFont font = QFont("KawkabMono");
+    QFont font = QFont("Kawkab Mono");
     font.setPointSize(10);
     painter.setFont(font);
 

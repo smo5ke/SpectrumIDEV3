@@ -8,12 +8,17 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setLayoutDirection(Qt::RightToLeft);
 
-    int fontId = QFontDatabase::addApplicationFont(":/fonts/Resources/fonts/Tajawal/Tajawal-Regular.ttf");
-    if(fontId == -1) {
-        qWarning("لم يستطع تحميل الخط");
+    int fontId1 = QFontDatabase::addApplicationFont(":/fonts/Resources/fonts/Tajawal/Tajawal-Regular.ttf");
+    int fontId2 = QFontDatabase::addApplicationFont(":/fonts/Resources/fonts/KawkabMono-Regular.ttf");
+    if(fontId1 == -1 or fontId2 == -1) {
+        qWarning() << "لم يستطع تحميل الخط";
     } else {
-        QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
-        QFont font(family);
+        QString tajawal = QFontDatabase::applicationFontFamilies(fontId1).at(0);
+        QString kawkabMono = QFontDatabase::applicationFontFamilies(fontId2).at(0);
+        QFont font{};
+        QStringList fontFamilies{};
+        fontFamilies << tajawal << kawkabMono;
+        font.setFamilies(fontFamilies);
         font.setPixelSize(14);
         app.setFont(font);
     }

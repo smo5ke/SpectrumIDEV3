@@ -20,6 +20,7 @@ signals:
     void saveRequested();
     void saveAsRequested();
     void runRequested();
+    void aboutRequested();
 
 private slots:
     void onNewAction() {
@@ -36,5 +37,8 @@ private slots:
     }
     void onRunAction() {
         emit runRequested();
+    }
+    void onAboutAction() {
+        emit aboutRequested();
     }
 };

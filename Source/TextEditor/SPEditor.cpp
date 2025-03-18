@@ -26,6 +26,8 @@ SPEditor::SPEditor(QWidget* parent) {
     connect(this, &QTextEdit::textChanged, this, [this]() {
         updateLineNumberAreaWidth();
     });
+    connect(verticalScrollBar(), &QScrollBar::valueChanged,
+            this, &SPEditor::updateLineNumberArea);
 
     // Handle special key events
     installEventFilter(this); // for SHIFT + ENTER it's make line without number
@@ -38,6 +40,7 @@ bool SPEditor::eventFilter(QObject* obj, QEvent* event) {
         // Handle Shift+Return or Shift+Enter
         if ((keyEvent->key() == Qt::Key_Return or keyEvent->key() == Qt::Key_Enter)
             and (keyEvent->modifiers() & Qt::ShiftModifier)) {
+
             return true; // Event handled
         }
     }
@@ -53,12 +56,15 @@ int SPEditor::lineNumberAreaWidth() const {
         ++digits;
     }
 
-    QFont font{};
+    QFont font("Kawkab Mono");
     font.setPointSize(10); // most be same lineNumberAreaPaintEvent() font PointSize
     QFontMetrics fm(font);
 
     // Increased width to accommodate line numbers
     int space = 21 + fm.horizontalAdvance(QLatin1Char('9')) * digits;
+
+    updateLineNumberArea();
+
     return space;
 }
 
@@ -67,6 +73,11 @@ void SPEditor::updateLineNumberAreaWidth() {
 
     // Set viewport margins to create space for line number area on the Left
     setViewportMargins(0, 0, width + 10, 0);
+}
+
+inline void SPEditor::updateLineNumberArea() const {
+    // Trigger a repaint of the line number area
+    lineNumberArea->update();
 }
 
 void SPEditor::resizeEvent(QResizeEvent* event) {

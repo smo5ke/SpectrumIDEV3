@@ -31,7 +31,7 @@ private:
 
 private slots:
     void updateLineNumberAreaWidth();
-
+    inline void updateLineNumberArea() const;
 
 signals:
     void openRequest(QString filePath);

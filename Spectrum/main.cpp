@@ -23,6 +23,38 @@ int main(int argc, char *argv[])
         app.setFont(font);
     }
 
+    // تخصيص شريط التمرير العمودي في كامل المحرر
+    app.setStyleSheet(R"(
+        QScrollBar:vertical {
+            background: transparent;
+            width: 12px;
+            margin: 0px 4px 0px 4px;
+        }
+
+        QScrollBar::handle:vertical {
+            background: #254663;
+            min-height: 15px;
+            border-radius: 2px;
+        }
+
+        QScrollBar::handle:vertical:hover {
+            background: #325573;
+        }
+
+        QScrollBar::add-line:vertical,
+        QScrollBar::sub-line:vertical {
+            background: none;
+            height: 0px;
+        }
+
+        QScrollBar::add-page:vertical,
+        QScrollBar::sub-page:vertical {
+            background: none;
+        }
+    )");
+
+
+
     // لتشغيل ملف ألف بإستخدام محرر طيف عند إختيار المحرر ك برنامج للتشغيل
     QString filePath{};
     if (app.arguments().count() > 2) {

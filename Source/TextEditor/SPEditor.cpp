@@ -56,9 +56,7 @@ int SPEditor::lineNumberAreaWidth() const {
         ++digits;
     }
 
-    QFont font("Kawkab Mono");
-    font.setPointSize(10); // most be same lineNumberAreaPaintEvent() font PointSize
-    QFontMetrics fm(font);
+    QFontMetrics fm(lineNumberArea->font());
 
     // Increased width to accommodate line numbers
     int space = 21 + fm.horizontalAdvance(QLatin1Char('9')) * digits;
@@ -100,11 +98,6 @@ void SPEditor::resizeEvent(QResizeEvent* event) {
 
 void SPEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
     QPainter painter(lineNumberArea);
-
-    // Set font size
-    QFont font = QFont("Kawkab Mono");
-    font.setPointSize(10);
-    painter.setFont(font);
 
     // Get vertical scroll bar value
     int scrollValue = verticalScrollBar()->value();

@@ -27,8 +27,8 @@ int main(int argc, char *argv[])
     app.setStyleSheet(R"(
         QScrollBar:vertical {
             background: transparent;
-            width: 12px;
-            margin: 0px 4px 0px 4px;
+            width: 16px;
+            margin: 16px 6px 16px 6px;
         }
 
         QScrollBar::handle:vertical {
@@ -41,10 +41,35 @@ int main(int argc, char *argv[])
             background: #325573;
         }
 
-        QScrollBar::add-line:vertical,
-        QScrollBar::sub-line:vertical {
+        QScrollBar::add-line:vertical { /* المكان الذي يحمل السهم السفلي */
+            background: transparent;
+            height: 16px;
+            padding: 2px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+        }
+
+        QScrollBar::sub-line:vertical { /* المكان الذي يحمل السهم العلوي*/
+            background: transparent;
+            height: 16px;
+            padding: 2px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+        }
+
+        QScrollBar::up-arrow:vertical,
+        QScrollBar::down-arrow:vertical {
+            width: 12px;
             background: none;
-            height: 0px;
+            color: white;
+        }
+
+        QScrollBar::up-arrow:vertical {
+            image: url(:/icons/Resources/up-arrow.png);
+        }
+
+        QScrollBar::down-arrow:vertical {
+            image: url(:/icons/Resources/down-arrow.png);
         }
 
         QScrollBar::add-page:vertical,

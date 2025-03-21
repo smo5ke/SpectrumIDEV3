@@ -14,5 +14,7 @@
         <file>Resources/TaifLogo.icns</file>
         <file>Resources/TaifLogo.ico</file>
         <file>Resources/TaifLogo.png</file>
+        <file>Resources/down-arrow.png</file>
+        <file>Resources/up-arrow.png</file>
     </qresource>
 </RCC>

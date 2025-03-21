@@ -48,6 +48,16 @@ public:
             "   border-bottom-left-radius: 9px;"     // Rounded bottom-left corner
             "}"
         );
+
+
+#if defined(Q_OS_WIN)
+        QString fontName = "Kawkab-Mono";
+#elif defined(Q_OS_LINUX) or defined(Q_OS_MAC)
+        QString fontName = "Kawkab Mono";
+#endif
+
+        this->setFont(QFont(fontName, 10));
+
     }
 
     QSize sizeHint() const override {

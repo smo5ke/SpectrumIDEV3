@@ -27,14 +27,14 @@ int main(int argc, char *argv[])
     app.setStyleSheet(R"(
         QScrollBar:vertical {
             background: transparent;
-            width: 16px;
-            margin: 16px 6px 16px 6px;
+            width: 20px;
+            margin: 18px 6px 18px 6px;
         }
 
         QScrollBar::handle:vertical {
             background: #254663;
             min-height: 15px;
-            border-radius: 2px;
+            border-radius: 4px;
         }
 
         QScrollBar::handle:vertical:hover {

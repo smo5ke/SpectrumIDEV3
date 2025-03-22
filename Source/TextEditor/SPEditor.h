@@ -56,7 +56,7 @@ public:
         QString fontName = "Kawkab Mono";
 #endif
 
-        this->setFont(QFont(fontName, 10));
+        this->setFont(QFont(fontName, 9));
 
     }
 

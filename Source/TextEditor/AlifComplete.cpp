@@ -2,7 +2,7 @@
 
 #include <QVBoxLayout>
 
-AutoComplete::AutoComplete(QTextEdit* editor, QObject* parent)
+AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
     : QObject(parent), editor(editor) {
     keywords = {
         "اطبع", "اواذا", "لاجل", "لأجل", "استمر", "استورد", "ارجع", "اذا", "احذف", "ادخل",
@@ -31,7 +31,7 @@ AutoComplete::AutoComplete(QTextEdit* editor, QObject* parent)
 
     editor->installEventFilter(this);
 
-    connect(editor, &QTextEdit::textChanged, this, &AutoComplete::showCompletion);
+    connect(editor, &QPlainTextEdit::textChanged, this, &AutoComplete::showCompletion);
     connect(listWidget, &QListWidget::itemClicked, this, &AutoComplete::insertCompletion);
 }
 

@@ -6,7 +6,7 @@
 
 class LineNumberArea;
 
-class SPEditor : public QTextEdit {
+class SPEditor : public QPlainTextEdit {
 	Q_OBJECT
 
 public:
@@ -31,7 +31,8 @@ private:
 
 private slots:
     void updateLineNumberAreaWidth();
-    inline void updateLineNumberArea() const;
+    void highlightCurrentLine();
+    inline void updateLineNumberArea(const QRect &rect, int dy);
 
 signals:
     void openRequest(QString filePath);
@@ -61,7 +62,7 @@ public:
     }
 
     QSize sizeHint() const override {
-        return QSize(spEditor->lineNumberAreaWidth(), height());
+        return QSize(spEditor->lineNumberAreaWidth(), 0);
     }
 
 protected:

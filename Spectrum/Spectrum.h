@@ -23,6 +23,7 @@ private slots:
     void saveFileAs();
 
     void runAlif();
+    void aboutSpectrum();
 
     void updateWindowTitle();
     void onModificationChanged(bool modified);

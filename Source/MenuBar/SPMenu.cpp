@@ -67,8 +67,8 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
         QMenu {
             color: #dddddd;
             background-color: #1e202e;
-            border-bottom: 1px solid #10a8f4;
-            border-left: 1px solid #10a8f4;
+            border-bottom: 1px solid #b850fa;
+            border-left: 1px solid #b850fa;
             border-radius: 3px;
         }
         QMenu::item {
@@ -100,6 +100,8 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
     connect(saveAsAction, &QAction::triggered, this, &SPMenuBar::onSaveAsAction);
 
     connect(runAction, &QAction::triggered, this, &SPMenuBar::onRunAction);
+
+    connect(aboutAction, &QAction::triggered, this, &SPMenuBar::onAboutAction);
 }
 
 

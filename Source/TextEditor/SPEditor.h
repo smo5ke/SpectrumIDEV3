@@ -6,7 +6,7 @@
 
 class LineNumberArea;
 
-class SPEditor : public QTextEdit {
+class SPEditor : public QPlainTextEdit {
 	Q_OBJECT
 
 public:
@@ -31,7 +31,8 @@ private:
 
 private slots:
     void updateLineNumberAreaWidth();
-
+    void highlightCurrentLine();
+    inline void updateLineNumberArea(const QRect &rect, int dy);
 
 signals:
     void openRequest(QString filePath);
@@ -48,10 +49,20 @@ public:
             "   border-bottom-left-radius: 9px;"     // Rounded bottom-left corner
             "}"
         );
+
+
+#if defined(Q_OS_WIN)
+        QString fontName = "Kawkab-Mono";
+#elif defined(Q_OS_LINUX) or defined(Q_OS_MAC)
+        QString fontName = "Kawkab Mono";
+#endif
+
+        this->setFont(QFont(fontName, 9));
+
     }
 
     QSize sizeHint() const override {
-        return QSize(spEditor->lineNumberAreaWidth(), height());
+        return QSize(spEditor->lineNumberAreaWidth(), 0);
     }
 
 protected:

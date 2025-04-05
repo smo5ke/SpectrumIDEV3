@@ -57,6 +57,7 @@ Spectrum::Spectrum(const QString& filePath, QWidget *parent)
     connect(menuBar, &SPMenuBar::saveRequested, this, &Spectrum::saveFile);
     connect(menuBar, &SPMenuBar::saveAsRequested, this, &Spectrum::saveFileAs);
     connect(menuBar, &SPMenuBar::runRequested, this, &Spectrum::runAlif);
+    connect(menuBar, &SPMenuBar::aboutRequested, this, &Spectrum::aboutSpectrum);
     connect(editor, &SPEditor::openRequest, this, [this](QString filePath){this->openFile(filePath);});
 
 
@@ -252,6 +253,40 @@ void Spectrum::runAlif() {
 
 
 
+
+
+
+/* ----------------------------------- Help Menu Button ----------------------------------- */
+
+
+void Spectrum::aboutSpectrum() {
+    QMessageBox::information(nullptr,
+                             "عن المحرر"
+                             ,R"(
+محرر طيف (نــ1.0) 1445-1446
+
+© الحقوق محفوظة لصالح
+برمجيات ألف - عبدالرحمن ومحمد الخطيب
+
+محرر نصي خاص بلغة ألف نـ5
+يعمل على جميع المنصات "ويندوز - لينكس - ماك"
+ـــــــــــــــــــــــــــــــــــــــــــــــــــــ
+المحرر لا يزال تحت التطوير وقد يحتوي بعض الاخطاء
+نرجو تبليغ مجتمع ألف في حال وجود أي خطأ
+https://t.me/aliflang
+ـــــــــــــــــــــــــــــــــــــــــــــــــــــ
+فريق التطوير لا يمتلك أي ضمانات وغير مسؤول
+عن أي خطأ او خلل قد يحدث بسبب المحرر.
+
+المحرر يخصع لرخصة برمجيات ألف
+يجب قراءة الرخصة جيداً قبل البدأ بإستخدام المحرر
+                            )");
+}
+
+
+
+
+
 /* ----------------------------------- Other Functions ----------------------------------- */
 
 void Spectrum::updateWindowTitle() {
@@ -268,7 +303,6 @@ void Spectrum::updateWindowTitle() {
 void Spectrum::onModificationChanged(bool modified) {
     this->setWindowModified(modified);
 }
-
 
 
 

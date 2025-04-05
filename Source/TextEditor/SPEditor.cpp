@@ -6,26 +6,28 @@
 #include <QMimeData>
 
 SPEditor::SPEditor(QWidget* parent) {
-
     setAcceptDrops(true);
-    this->setAcceptRichText(false);
-    this->setStyleSheet("QTextEdit { background-color: #141520; color: #cccccc;}");
+    this->setStyleSheet("QPlainTextEdit { background-color: #141520; color: #cccccc;}");
     this->setTabStopDistance(32);
 
     // set "force" cursor and text direction from right to left
     QTextDocument* editorDocument = this->document();
     QTextOption option = editorDocument->defaultTextOption();
     option.setTextDirection(Qt::RightToLeft);
+    option.setAlignment(Qt::AlignRight);
     editorDocument->setDefaultTextOption(option);
+
 
     highlighter = new SyntaxHighlighter(editorDocument);
     autoComplete = new AutoComplete(this, parent);
     lineNumberArea = new LineNumberArea(this);
 
+    connect(this, &SPEditor::blockCountChanged, this, &SPEditor::updateLineNumberAreaWidth);
+    connect(this, &SPEditor::updateRequest, this, &SPEditor::updateLineNumberArea);
+    connect(this, &SPEditor::cursorPositionChanged, this, &SPEditor::highlightCurrentLine);
+
     updateLineNumberAreaWidth();
-    connect(this, &QTextEdit::textChanged, this, [this]() {
-        updateLineNumberAreaWidth();
-    });
+    highlightCurrentLine();
 
     // Handle special key events
     installEventFilter(this); // for SHIFT + ENTER it's make line without number
@@ -38,39 +40,47 @@ bool SPEditor::eventFilter(QObject* obj, QEvent* event) {
         // Handle Shift+Return or Shift+Enter
         if ((keyEvent->key() == Qt::Key_Return or keyEvent->key() == Qt::Key_Enter)
             and (keyEvent->modifiers() & Qt::ShiftModifier)) {
+
             return true; // Event handled
         }
     }
 
-    return QTextEdit::eventFilter(obj, event);
+    return QPlainTextEdit::eventFilter(obj, event);
 }
 
 int SPEditor::lineNumberAreaWidth() const {
     int digits = 1;
-    int max = qMax(1, document()->blockCount());
+    int max = qMax(1, blockCount());
     while (max >= 10) {
         max /= 10;
         ++digits;
     }
 
-    QFont font{};
-    font.setPointSize(10); // most be same lineNumberAreaPaintEvent() font PointSize
-    QFontMetrics fm(font);
-
     // Increased width to accommodate line numbers
-    int space = 21 + fm.horizontalAdvance(QLatin1Char('9')) * digits;
+    int space = 21 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
+
     return space;
 }
 
 void SPEditor::updateLineNumberAreaWidth() {
     int width = lineNumberAreaWidth();
-
     // Set viewport margins to create space for line number area on the Left
     setViewportMargins(0, 0, width + 10, 0);
 }
 
+inline void SPEditor::updateLineNumberArea(const QRect &rect, int dy) {
+    // Trigger a repaint of the line number area
+    if (dy)
+        lineNumberArea->scroll(0, dy);
+    else
+        lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
+
+    if (rect.contains(viewport()->rect()))
+        updateLineNumberAreaWidth();
+}
+
 void SPEditor::resizeEvent(QResizeEvent* event) {
-    QTextEdit::resizeEvent(event);
+    QPlainTextEdit::resizeEvent(event);
 
     QRect cr = contentsRect();
     int areaWidth = lineNumberAreaWidth();
@@ -84,50 +94,50 @@ void SPEditor::resizeEvent(QResizeEvent* event) {
 }
 
 
-
-
-
 void SPEditor::lineNumberAreaPaintEvent(QPaintEvent* event) {
     QPainter painter(lineNumberArea);
+    painter.fillRect(event->rect(), Qt::transparent);
 
-    // Set font size
-    QFont font = QFont("KawkabMono");
-    font.setPointSize(10);
-    painter.setFont(font);
+    QTextBlock block = firstVisibleBlock();
+    int blockNumber = block.blockNumber();
+    int top = qRound(blockBoundingGeometry(block).translated(contentOffset()).top());
+    int bottom = top + qRound(blockBoundingRect(block).height());
 
-    // Get vertical scroll bar value
-    int scrollValue = verticalScrollBar()->value();
-
-    // Get document layout
-    QAbstractTextDocumentLayout* docLayout = document()->documentLayout();
-
-    QTextBlock block = document()->begin();
-    int blockNumber = 0;
-
-    while (block.isValid()) {
-        // Get block's bounding rectangle
-        QRectF blockRect = docLayout->blockBoundingRect(block);
-
-        // Calculate the vertical position of the block
-        int blockTop = qRound(blockRect.top() - scrollValue);
-
-        QString number = QString::number(blockNumber + 1);
-
-        // Number color
-        painter.setPen(QColor(200, 200, 200));
-
-        // Calculate text width
-        painter.drawText(12, blockTop, lineNumberArea->width(),
-            fontMetrics().height(),
-            Qt::AlignRight | Qt::AlignVCenter, number);
+    while (block.isValid() and top <= event->rect().bottom()) {
+        if (block.isVisible() and bottom >= event->rect().top()) {
+            QString number = QString::number(blockNumber + 1);
+            painter.setPen(QColor(200, 200, 200));
+            painter.drawText(12, top, lineNumberArea->width(), fontMetrics().height(),
+                             Qt::AlignRight | Qt::AlignVCenter, number);
+        }
 
         block = block.next();
+        top = bottom;
+        bottom = top + qRound(blockBoundingRect(block).height());
         ++blockNumber;
     }
 
 }
 
 
+
+void SPEditor::highlightCurrentLine() {
+    QList<QTextEdit::ExtraSelection> extraSelections;
+
+    if (!isReadOnly()) {
+        QTextEdit::ExtraSelection selection;
+
+        QColor lineColor = QColor(23, 24, 36, 240);
+
+        selection.format.setBackground(lineColor);
+        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+        selection.cursor = textCursor();
+        selection.cursor.clearSelection();
+        extraSelections.append(selection);
+    }
+
+    setExtraSelections(extraSelections);
+}
 
 
 /* ---------------------------------- Drag and Drop ---------------------------------- */

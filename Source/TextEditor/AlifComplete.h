@@ -24,6 +24,10 @@ private:
     QWidget* popup{};
     QListWidget* listWidget{};
     QStringList keywords{};
+    QMap<QString, QString> shortcuts;
+    QMap<QString, QString> descriptions;
+    QList<int> placeholderPositions;
+    int currentPlaceholderIndex;
 
     QString getCurrentWord() const;
     void showPopup();

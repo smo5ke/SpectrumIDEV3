@@ -11,6 +11,7 @@ enum class TokenType {
     Number,
     Comment,
     String,
+    Operator,
 };
 
 class Token {

@@ -13,31 +13,35 @@ void SyntaxHighlighter::highlightBlock(const QString& text) {
         QTextCharFormat format;
         switch (token.type) {
         case TokenType::Keyword:
-            format.setForeground(QColor(255, 121, 198));
-            format.setFontWeight(QFont::Bold);
+            format.setForeground(QColor(205, 119, 57));
+            // format.setFontWeight(QFont::Bold);
             break;
         case TokenType::Keyword1:
-            format.setForeground(QColor(222, 49, 99));
-            format.setFontWeight(QFont::Bold);
+            format.setForeground(QColor(205, 119, 57));
+            // format.setFontWeight(QFont::Bold);
             break;
         case TokenType::Keyword2:
-            format.setForeground(QColor(204, 204, 255));
+            format.setForeground(QColor(195, 124, 88));
             format.setFontWeight(QFont::Bold);
             break;
         case TokenType::Number:
-            format.setForeground(QColor(255, 184, 108));
+            format.setForeground(QColor(168, 135, 206));
             break;
         case TokenType::Identifier:
             if (isFunctionName(text, token.startPos + token.len)) {
-                format.setForeground(QColor(139, 233, 253));
-                format.setFontWeight(QFont::Bold);
+                format.setForeground(QColor(206, 147, 74));
+                // format.setFontWeight(QFont::Bold);
             }
             break;
         case TokenType::Comment:
-            format.setForeground(QColor(98, 114, 164));
+            format.setForeground(QColor(85, 91, 100));
+            format.setFontItalic(true);
             break;
         case TokenType::String:
-            format.setForeground(QColor(80, 250, 123));
+            format.setForeground(QColor(137, 174, 66));
+            break;
+        case TokenType::Operator:
+            format.setForeground(QColor(195, 124, 88));
             break;
         default:
             break;

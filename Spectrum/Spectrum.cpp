@@ -5,6 +5,10 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QShortcut>
+#include <QGuiApplication>
+#include <QScreen>
+#include <QCoreApplication>
+#include <QTextStream>
 
 
 Spectrum::Spectrum(const QString& filePath, QWidget *parent)

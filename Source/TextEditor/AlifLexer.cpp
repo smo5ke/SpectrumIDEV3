@@ -79,6 +79,25 @@ QVector<Token> Lexer::tokenize(const QString& text) {
             }
             tokens.append(Token(TokenType::Comment, start, pos - start, text.mid(start, pos - start)));
         }
+        else if (QString("+-*/\\=<>!&|%^~").contains(currentChar)) {
+            int start = pos;
+            QString op;
+            op += currentChar;
+            pos++;
+        
+            if (pos < text.length()) {
+                QChar nextChar = text[pos];
+                if ((currentChar == '=' && nextChar == '=') ||
+                    (currentChar == '!' && nextChar == '=') ||
+                    (currentChar == '<' && nextChar == '=') ||
+                    (currentChar == '>' && nextChar == '=')) {
+                    op += nextChar;
+                    pos++;
+                }
+            }
+        
+            tokens.append(Token(TokenType::Operator, start, pos - start, op));
+        }
         else {
             pos++;
         }

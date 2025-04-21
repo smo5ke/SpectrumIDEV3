@@ -102,7 +102,7 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
     popup = new QWidget(editor, Qt::ToolTip | Qt::FramelessWindowHint);
     listWidget = new QListWidget(popup);
     popup->setStyleSheet(
-        "QWidget { background-color: #242533; color: #cccccc; font-size: 16px; }"
+        "QWidget { background-color: #242533; color: #cccccc; }"
         "QListWidget { background-color: #242533; color: #cccccc; }"
         "QListWidget::item { padding: 7px 12px; }"
         "QListWidget::item:selected { background-color: #3a3d54; }");
@@ -132,12 +132,12 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
 
         QLabel* descriptionLabel = new QLabel(descriptionContainer);
         descriptionLabel->setText(desc);
-        descriptionLabel->setStyleSheet("color: #cccccc; font-size: 16px; padding: 5px;");
+        descriptionLabel->setStyleSheet("color: #cccccc; padding: 5px;");
         descriptionLabel->setWordWrap(true);
 
         QPushButton* moreButton = new QPushButton("عرض المزيد", descriptionContainer);
         moreButton->setFixedWidth(100);
-        moreButton->setStyleSheet("background-color: none; color: #10a8f4; font-size: 15px; padding: 0px; border: none;");
+        moreButton->setStyleSheet("background-color: none; color: #10a8f4; padding: 0px; border: none;");
         connect(moreButton, &QPushButton::clicked, this, [current]() {
             QString keyword = current->text();
             QString url = QString("https://aliflang.org/Docs#%1").arg(keyword);

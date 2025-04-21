@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
         QStringList fontFamilies{};
         fontFamilies << tajawal << kawkabMono;
         font.setFamilies(fontFamilies);
-        font.setPixelSize(14);
+        font.setPixelSize(16);
         app.setFont(font);
     }
 
@@ -94,6 +94,6 @@ int main(int argc, char *argv[])
     }
 
     Spectrum w(filePath);
-    w.show();
+    w.showMaximized();
     return app.exec();
 }

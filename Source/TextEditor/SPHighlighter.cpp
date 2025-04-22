@@ -20,7 +20,6 @@ void SyntaxHighlighter::highlightBlock(const QString& text) {
             break;
         case TokenType::Keyword2:
             format.setForeground(QColor(121, 129, 230));
-            format.setFontWeight(QFont::Bold);
             break;
         case TokenType::Number:
             format.setForeground(QColor(168, 135, 206));

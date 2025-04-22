@@ -87,10 +87,10 @@ QVector<Token> Lexer::tokenize(const QString& text) {
         
             if (pos < text.length()) {
                 QChar nextChar = text[pos];
-                if ((currentChar == '=' && nextChar == '=') ||
-                    (currentChar == '!' && nextChar == '=') ||
-                    (currentChar == '<' && nextChar == '=') ||
-                    (currentChar == '>' && nextChar == '=')) {
+                if ((currentChar == '=' and nextChar == '=') or
+                    (currentChar == '!' and nextChar == '=') or
+                    (currentChar == '<' and nextChar == '=') or
+                    (currentChar == '>' and nextChar == '=')) {
                     op += nextChar;
                     pos++;
                 }

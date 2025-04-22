@@ -14,22 +14,21 @@
 AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
     : QObject(parent), editor(editor) {
     keywords = QStringList()
-        << "اطبع" << "اواذا" << "لاجل"
+        << "اطبع" << "اواذا" << "لاجل" << "أوإذا"
         << "استمر" << "استورد" << "ارجع" << "اذا"
         << "احذف" << "ادخل" << "بينما" << "توقف"
         << "خطأ" << "دالة" << "صنف" << "صح"
         << "عدم" << "ليس" << "مدى" << "والا"
-        << "عام" << "و" << "او"
-        << ".اضف" << ".امسح" << ".ادرج"
-        << "صحيح" << "عشري" << "الوقت" << "غفوة"
-        << "الرياضيات" << "_تهيئة_";
+        << "عام" << "و" << "او" << "إذا"
+        << "اضف" << "امسح" << "ادرج"
+        << "صحيح" << "عشري" << "غفوة" << "_تهيئة_";
 
     shortcuts = {
         {"اطبع", "اطبع($1)"},
         {"اواذا", "اواذا $1:"},
         {"أوإذا", "أوإذا $1:"},
-        {"لاجل", "لاجل $1 في مدى()"},
-        {"لأجل", "لأجل $1 في مدى()"},
+        {"لاجل", "لاجل $1 في مدى():"},
+        {"لأجل", "لأجل $1 في مدى():"},
         {"استمر", "استمر"},
         {"استورد", "استورد $1"},
         {"ارجع", "ارجع $1"},
@@ -52,14 +51,12 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
         {"عام", "عام $1"},
         {"و", "و"},
         {"او", "او"},
-        {".اضف", ".اضف($1)"},
-        {".امسح", ".امسح($1)"},
-        {".ادرج", ".ادرج($1)"},
+        {"اضف", ".اضف($1)"},
+        {"امسح", ".امسح($1)"},
+        {"ادرج", ".ادرج($1)"},
         {"صحيح", "صحيح($1)"},
         {"عشري", "عشري($1)"},
-        {"الوقت", "الوقت.$1"},
         {"غفوة", "الوقت.غفوة($1)"},
-        {"الرياضيات", "الرياضيات.$1"},
         {"_تهيئة_", "_تهيئة_"}
     };        
     descriptions = {
@@ -71,31 +68,29 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
         {"استمر", "تجاوز التكرار الحالي والانتقال إلى التالي."},
         {"استورد", "جلب مكتبة أو ملف خارجي للبرنامج."},
         {"ارجع", "إرجاع قيمة من دالة."},
-        {"اذا", "تنفيذ كود في حال تحقق الشرط."},
-        {"إذا", "تنفيذ كود في حال تحقق الشرط."},
+        {"اذا", "تنفيذ أمر في حال تحقق الشرط."},
+        {"إذا", "تنفيذ أمر في حال تحقق الشرط."},
         {"احذف", "إزالة متغير من الذاكرة."},
         {"ادخل", "قراءة مدخل من المستخدم."},
         {"بينما", "حلقة تعمل طالما أن الشرط صحيح."},
-        {"توقف", "إيقاف تنفيذ البرنامج."},
+        {"توقف", "إيقاف تنفيذ الحلقة."},
         {"خطا", "قيمة تدل على أن الشرط غير محقق."},
         {"خطأ", "قيمة تدل على أن الشرط غير محقق."},
         {"صح", "قيمة تدل على أن الشرط محقق."},
-        {"دالة", "تعريف دالة جديدة لتنفيذ كود معين."},
+        {"دالة", "تعريف دالة جديدة لتنفيذ أمر معين."},
         {"صنف", "إنشاء كائن وفق نموذج معين."},
         {"عدم", "التحقق من عدم وجود شيء."},
         {"ليس", "نفي شرط أو قيمة."},
         {"مدى", "تحديد مجموعة أرقام بين قيمتين."},
-        {"والا", "تنفيذ كود إذا لم يتحقق الشرط السابق."},
-        {"وإلا", "تنفيذ كود إذا لم يتحقق الشرط السابق."},
+        {"والا", "تنفيذ أمر إذا لم يتحقق الشرط السابق."},
+        {"وإلا", "تنفيذ أمر إذا لم يتحقق الشرط السابق."},
         {"عام", "تعريف متغير عام متاح في كل مكان."},
         {"و", "تحقق الشرطين معًا."},
         {"او", "يكفي تحقق أحد الشرطين."},
-        {".اضف", "إضافة عنصر إلى قائمة."},
-        {".امسح", "حذف عنصر من قائمة."},
-        {".ادرج", "إدخال عنصر في موضع محدد داخل قائمة."},
-        {"الوقت", "التعامل مع التاريخ والوقت."},
+        {"اضف", "إضافة عنصر إلى قائمة."},
+        {"امسح", "حذف عنصر من قائمة."},
+        {"ادرج", "إدخال عنصر في موضع محدد داخل قائمة."},
         {"غفوة", "تأخير تنفيذ البرنامج لفترة معينة."},
-        {"الرياضيات", "إجراء عمليات رياضية متقدمة."},
         {"_تهيئة_", "تهيئة متغيرات أو كائنات قبل الاستخدام."}
     };    
 
@@ -117,45 +112,45 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
     connect(editor, &QPlainTextEdit::textChanged, this, &AutoComplete::showCompletion);
     connect(listWidget, &QListWidget::itemClicked, this, &AutoComplete::insertCompletion);
 
-    connect(listWidget, &QListWidget::currentItemChanged, this, [=](QListWidgetItem* current, QListWidgetItem*)
-            {
+    QWidget* descrWidget = new QWidget(popup);
+    QHBoxLayout* descrLayout = new QHBoxLayout(descrWidget);
+    descrLayout->setContentsMargins(0, 0, 0, 0);
+    descrLayout->setSpacing(10);
+
+    QLabel* descriptionLabel = new QLabel(descrWidget);
+    descriptionLabel->setStyleSheet("color: #cccccc; padding: 5px;");
+    descriptionLabel->setWordWrap(true);
+
+    QPushButton* moreButton = new QPushButton("عرض المزيد", descrWidget);
+    moreButton->setFixedWidth(100);
+    moreButton->setStyleSheet("background-color: none; color: #10a8f4; padding: 0px; border: none;");
+
+    QVBoxLayout* popupLayout = qobject_cast<QVBoxLayout*>(popup->layout());
+    if (popupLayout) {
+        if (popupLayout->count() > 1) {
+            QLayoutItem* oldItem = popupLayout->takeAt(1);
+            delete oldItem->widget();
+            delete oldItem;
+        }
+        popupLayout->addWidget(descrWidget);
+    }
+
+    descrLayout->addWidget(descriptionLabel);
+    descrLayout->addWidget(moreButton);
+
+    connect(listWidget, &QListWidget::currentItemChanged, this, [=](QListWidgetItem* current, QListWidgetItem*) {
         if (!current) return;
         QString desc = descriptions.value(current->text(), QString());
         if (desc.isEmpty()) {
             return;
         }
-
-        QWidget* descriptionContainer = new QWidget(popup);
-        QHBoxLayout* containerLayout = new QHBoxLayout(descriptionContainer);
-        containerLayout->setContentsMargins(0, 0, 0, 0);
-        containerLayout->setSpacing(10);
-
-        QLabel* descriptionLabel = new QLabel(descriptionContainer);
         descriptionLabel->setText(desc);
-        descriptionLabel->setStyleSheet("color: #cccccc; padding: 5px;");
-        descriptionLabel->setWordWrap(true);
 
-        QPushButton* moreButton = new QPushButton("عرض المزيد", descriptionContainer);
-        moreButton->setFixedWidth(100);
-        moreButton->setStyleSheet("background-color: none; color: #10a8f4; padding: 0px; border: none;");
         connect(moreButton, &QPushButton::clicked, this, [current]() {
             QString keyword = current->text();
             QString url = QString("https://aliflang.org/Docs/#%1").arg(keyword);
             QDesktopServices::openUrl(QUrl(url));
         });
-
-        containerLayout->addWidget(descriptionLabel);
-        containerLayout->addWidget(moreButton);
-
-        QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(popup->layout());
-        if (layout) {
-            if (layout->count() > 1) {
-                QLayoutItem* oldItem = layout->takeAt(1);
-                delete oldItem->widget();
-                delete oldItem;
-            }
-            layout->addWidget(descriptionContainer);
-        }
     });
 }
 

@@ -13,15 +13,13 @@ void SyntaxHighlighter::highlightBlock(const QString& text) {
         QTextCharFormat format;
         switch (token.type) {
         case TokenType::Keyword:
-            format.setForeground(QColor(205, 119, 57));
-            // format.setFontWeight(QFont::Bold);
+            format.setForeground(QColor(254, 135, 48));
             break;
         case TokenType::Keyword1:
-            format.setForeground(QColor(205, 119, 57));
-            // format.setFontWeight(QFont::Bold);
+            format.setForeground(QColor(218, 183, 68));
             break;
         case TokenType::Keyword2:
-            format.setForeground(QColor(195, 124, 88));
+            format.setForeground(QColor(121, 129, 230));
             format.setFontWeight(QFont::Bold);
             break;
         case TokenType::Number:
@@ -30,7 +28,6 @@ void SyntaxHighlighter::highlightBlock(const QString& text) {
         case TokenType::Identifier:
             if (isFunctionName(text, token.startPos + token.len)) {
                 format.setForeground(QColor(206, 147, 74));
-                // format.setFontWeight(QFont::Bold);
             }
             break;
         case TokenType::Comment:
@@ -38,10 +35,10 @@ void SyntaxHighlighter::highlightBlock(const QString& text) {
             format.setFontItalic(true);
             break;
         case TokenType::String:
-            format.setForeground(QColor(137, 174, 66));
+            format.setForeground(QColor(78, 116, 51));
             break;
         case TokenType::Operator:
-            format.setForeground(QColor(195, 124, 88));
+            format.setForeground(QColor(224, 108, 117));
             break;
         default:
             break;

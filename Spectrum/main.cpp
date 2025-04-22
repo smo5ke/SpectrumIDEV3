@@ -20,7 +20,8 @@ int main(int argc, char *argv[])
         QStringList fontFamilies{};
         fontFamilies << tajawal << kawkabMono;
         font.setFamilies(fontFamilies);
-        font.setPixelSize(16);
+        font.setPixelSize(18);
+        font.setWeight(QFont::Weight::Thin);
         app.setFont(font);
     }
 

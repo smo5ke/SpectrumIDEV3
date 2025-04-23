@@ -14,27 +14,33 @@ void SyntaxHighlighter::highlightBlock(const QString& text) {
         switch (token.type) {
         case TokenType::Keyword:
             format.setForeground(QColor(254, 135, 48));
+            // format.setForeground(QColor(255, 121, 198));
             break;
         case TokenType::Keyword1:
             format.setForeground(QColor(218, 183, 68));
+            // format.setForeground(QColor(222, 49, 99));
             break;
         case TokenType::Keyword2:
             format.setForeground(QColor(121, 129, 230));
+            // format.setForeground(QColor(204, 204, 255));
             break;
         case TokenType::Number:
             format.setForeground(QColor(168, 135, 206));
+            // format.setForeground(QColor(255, 184, 108));
             break;
         case TokenType::Identifier:
             if (isFunctionName(text, token.startPos + token.len)) {
                 format.setForeground(QColor(206, 147, 74));
+                // format.setForeground(QColor(139, 233, 253));
             }
             break;
         case TokenType::Comment:
             format.setForeground(QColor(85, 91, 100));
-            format.setFontItalic(true);
+            // format.setForeground(QColor(98, 114, 164));
             break;
         case TokenType::String:
             format.setForeground(QColor(78, 116, 51));
+            // format.setForeground(QColor(80, 250, 123));
             break;
         case TokenType::Operator:
             format.setForeground(QColor(224, 108, 117));

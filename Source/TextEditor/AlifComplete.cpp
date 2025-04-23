@@ -27,8 +27,8 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
         {"اطبع", "اطبع($1)"},
         {"اواذا", "اواذا $1:"},
         {"أوإذا", "أوإذا $1:"},
-        {"لاجل", "لاجل $1 في مدى():"},
-        {"لأجل", "لأجل $1 في مدى():"},
+        {"لاجل", "لاجل $1 في :"},
+        {"لأجل", "لأجل $1 في :"},
         {"استمر", "استمر"},
         {"استورد", "استورد $1"},
         {"ارجع", "ارجع $1"},
@@ -61,11 +61,11 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
     };        
     descriptions = {
         {"اطبع", "لعرض نص أو رقم أو قيمة في الطرفية."},
-        {"اواذا", "شرط إضافي بعد الشرط الأول."},
-        {"أوإذا", "شرط إضافي بعد الشرط الأول."},
-        {"لاجل", "حلقة تكرار تُستخدم عددًا معينًا من المرات."},
-        {"لأجل", "حلقة تكرار تُستخدم عددًا معينًا من المرات."},
-        {"استمر", "تجاوز التكرار الحالي والانتقال إلى التالي."},
+        {"اواذا", "شرط إضافي بعد الشرط الرئيسي."},
+        {"أوإذا", "شرط إضافي بعد الشرط الرئيسي."},
+        {"لاجل", "حلقة تكرار ضمن مدى من الاعداد او مجموعة عناصر حاوية كالمصفوفة."},
+        {"لأجل", "حلقة تكرار ضمن مدى من الاعداد او مجموعة عناصر حاوية كالمصفوفة."},
+        {"استمر", "الانتقال إلى التكرار التالي."},
         {"استورد", "جلب مكتبة أو ملف خارجي للبرنامج."},
         {"ارجع", "إرجاع قيمة من دالة."},
         {"اذا", "تنفيذ أمر في حال تحقق الشرط."},
@@ -74,84 +74,62 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
         {"ادخل", "قراءة مدخل من المستخدم."},
         {"بينما", "حلقة تعمل طالما أن الشرط صحيح."},
         {"توقف", "إيقاف تنفيذ الحلقة."},
-        {"خطا", "قيمة تدل على أن الشرط غير محقق."},
-        {"خطأ", "قيمة تدل على أن الشرط غير محقق."},
-        {"صح", "قيمة تدل على أن الشرط محقق."},
-        {"دالة", "تعريف دالة جديدة لتنفيذ أمر معين."},
-        {"صنف", "إنشاء كائن وفق نموذج معين."},
-        {"عدم", "التحقق من عدم وجود شيء."},
+        {"خطا", "قيمة منطقية تدل على أن الشرط غير محقق."},
+        {"خطأ", "قيمة منطقية تدل على أن الشرط غير محقق."},
+        {"صح", "قيمة منطقية تدل على أن الشرط محقق."},
+        {"دالة", "تعريف دالة جديدة لتنفيذ مجموعة اوامر معينة."},
+        {"صنف", "إنشاء كائن."},
+        {"عدم", "قيمة فارغة."},
         {"ليس", "نفي شرط أو قيمة."},
         {"مدى", "تحديد مجموعة أرقام بين قيمتين."},
         {"والا", "تنفيذ أمر إذا لم يتحقق الشرط السابق."},
         {"وإلا", "تنفيذ أمر إذا لم يتحقق الشرط السابق."},
-        {"عام", "تعريف متغير عام متاح في كل مكان."},
+        {"عام", "إخبار النطاق الداخلي أن هذا المتغير عام."},
         {"و", "تحقق الشرطين معًا."},
         {"او", "يكفي تحقق أحد الشرطين."},
-        {"اضف", "إضافة عنصر إلى قائمة."},
-        {"امسح", "حذف عنصر من قائمة."},
-        {"ادرج", "إدخال عنصر في موضع محدد داخل قائمة."},
+        {"اضف", "إضافة عنصر إلى المصفوفة."},
+        {"امسح", "حذف عنصر من المصفوفة."},
+        {"ادرج", "إدخال عنصر في موضع محدد داخل المصفوفة."},
         {"غفوة", "تأخير تنفيذ البرنامج لفترة معينة."},
-        {"_تهيئة_", "تهيئة متغيرات أو كائنات قبل الاستخدام."}
+        {"_تهيئة_", "تهيئة الكائن بشكل تلقائي في حال تم استدعائه."}
     };    
 
     popup = new QWidget(editor, Qt::ToolTip | Qt::FramelessWindowHint);
-    listWidget = new QListWidget(popup);
     popup->setStyleSheet(
         "QWidget { background-color: #242533; color: #cccccc; }"
         "QListWidget { background-color: #242533; color: #cccccc; }"
-        "QListWidget::item { padding: 7px 12px; }"
-        "QListWidget::item:selected { background-color: #3a3d54; }");
+        "QListWidget::item { padding: 7px; }"
+        "QListWidget::item:selected { background-color: #3a3d54; padding: 0 12px 0 0; }");
 
-    QVBoxLayout* layout = new QVBoxLayout(popup);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(listWidget);
-    popup->setLayout(layout);
+    QVBoxLayout* popupLayout = new QVBoxLayout(popup);
+    popupLayout->setContentsMargins(0, 0, 0, 0);
 
-    editor->installEventFilter(this);
+    listWidget = new QListWidget(popup);
 
-    connect(editor, &QPlainTextEdit::textChanged, this, &AutoComplete::showCompletion);
-    connect(listWidget, &QListWidget::itemClicked, this, &AutoComplete::insertCompletion);
-
-    QWidget* descrWidget = new QWidget(popup);
-    QHBoxLayout* descrLayout = new QHBoxLayout(descrWidget);
-    descrLayout->setContentsMargins(0, 0, 0, 0);
-    descrLayout->setSpacing(10);
-
-    QLabel* descriptionLabel = new QLabel(descrWidget);
-    descriptionLabel->setStyleSheet("color: #cccccc; padding: 5px;");
+    QLabel* descriptionLabel = new QLabel(popup);
+    descriptionLabel->setStyleSheet("color: #cccccc; padding: 3px;");
     descriptionLabel->setWordWrap(true);
 
-    QPushButton* moreButton = new QPushButton("عرض المزيد", descrWidget);
-    moreButton->setFixedWidth(100);
-    moreButton->setStyleSheet("background-color: none; color: #10a8f4; padding: 0px; border: none;");
+    // set layouts
+    popupLayout->addWidget(listWidget);
+    popupLayout->addWidget(descriptionLabel);
+    popup->setLayout(popupLayout);
 
-    QVBoxLayout* popupLayout = qobject_cast<QVBoxLayout*>(popup->layout());
-    if (popupLayout) {
-        if (popupLayout->count() > 1) {
-            QLayoutItem* oldItem = popupLayout->takeAt(1);
-            delete oldItem->widget();
-            delete oldItem;
-        }
-        popupLayout->addWidget(descrWidget);
-    }
-
-    descrLayout->addWidget(descriptionLabel);
-    descrLayout->addWidget(moreButton);
-
-    connect(listWidget, &QListWidget::currentItemChanged, this, [=](QListWidgetItem* current, QListWidgetItem*) {
+    // connections
+    connect(listWidget, &QListWidget::currentItemChanged, this,
+            [=](QListWidgetItem* current, QListWidgetItem* previos) {
         if (!current) return;
         QString desc = descriptions.value(current->text(), QString());
         if (desc.isEmpty()) {
             return;
         }
         descriptionLabel->setText(desc);
-
-        connect(moreButton, &QPushButton::clicked, this, [current]() {
-            QString keyword = current->text();
-            QString url = QString("https://aliflang.org/Docs/#%1").arg(keyword);
-            QDesktopServices::openUrl(QUrl(url));
-        });
     });
+    connect(editor, &QPlainTextEdit::textChanged, this, &AutoComplete::showCompletion);
+    connect(listWidget, &QListWidget::itemClicked, this, &AutoComplete::insertCompletion);
+
+    // filters
+    editor->installEventFilter(this);
 }
 
 
@@ -280,7 +258,8 @@ void AutoComplete::insertCompletion() {
     }
 
     // فرز العلامات حسب ظهورها
-    std::sort(matches.begin(), matches.end(), [](const QPair<int, int> &a, const QPair<int, int> &b) {
+    std::sort(matches.begin(), matches.end(),
+              [](const QPair<int, int> &a, const QPair<int, int> &b) {
         return a.first < b.first;
     });
 

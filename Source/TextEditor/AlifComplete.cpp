@@ -1,38 +1,135 @@
 #include "AlifComplete.h"
 
 #include <QVBoxLayout>
+#include <QCoreApplication>
+#include <QGuiApplication>
+#include <QScreen>
+#include <QStringList>
+#include <QPushButton>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QLabel>
+
 
 AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
     : QObject(parent), editor(editor) {
-    keywords = {
-        "اطبع", "اواذا", "لاجل", "لأجل", "استمر", "استورد", "ارجع", "اذا", "احذف", "ادخل",
-        "أوإذا", "إذا",
-        "بينما",
-        "توقف",
-        "خطا", "خطأ",
-        "دالة",
-        "صنف", "صح",
-        "عدم",
-        "ليس",
-        "مرر", "مدى",
-        "والا", "وإلا", 
-        "هذا",
-        "_تهيئة_",
-    };
+    keywords = QStringList()
+        << "اطبع" << "اواذا" << "لاجل" << "أوإذا"
+        << "استمر" << "استورد" << "ارجع" << "اذا"
+        << "احذف" << "ادخل" << "بينما" << "توقف"
+        << "خطأ" << "دالة" << "صنف" << "صح"
+        << "عدم" << "ليس" << "مدى" << "والا"
+        << "عام" << "و" << "او" << "إذا"
+        << "اضف" << "امسح" << "ادرج"
+        << "صحيح" << "عشري" << "غفوة" << "_تهيئة_";
+
+    shortcuts = {
+        {"اطبع", "اطبع($1)"},
+        {"اواذا", "اواذا $1:"},
+        {"أوإذا", "أوإذا $1:"},
+        {"لاجل", "لاجل $1 في :"},
+        {"لأجل", "لأجل $1 في :"},
+        {"استمر", "استمر"},
+        {"استورد", "استورد $1"},
+        {"ارجع", "ارجع $1"},
+        {"اذا", "اذا $1:"},
+        {"إذا", "إذا $1:"},
+        {"احذف", "احذف $1"},
+        {"ادخل", "ادخل($1)"},
+        {"بينما", "بينما $1:"},
+        {"توقف", "توقف"},
+        {"خطا", "خطا"},
+        {"خطأ", "خطأ"},
+        {"صح", "صح"},
+        {"دالة", "دالة $1():"},
+        {"صنف", "صنف $1:"},
+        {"عدم", "عدم"},
+        {"ليس", "ليس"},
+        {"مدى", "مدى($1)"},
+        {"والا", "والا:\n\t$1"},
+        {"وإلا", "وإلا:\n\t$1"},
+        {"عام", "عام $1"},
+        {"و", "و"},
+        {"او", "او"},
+        {"اضف", ".اضف($1)"},
+        {"امسح", ".امسح($1)"},
+        {"ادرج", ".ادرج($1)"},
+        {"صحيح", "صحيح($1)"},
+        {"عشري", "عشري($1)"},
+        {"غفوة", "الوقت.غفوة($1)"},
+        {"_تهيئة_", "_تهيئة_"}
+    };        
+    descriptions = {
+        {"اطبع", "لعرض نص أو رقم أو قيمة في الطرفية."},
+        {"اواذا", "شرط إضافي بعد الشرط الرئيسي."},
+        {"أوإذا", "شرط إضافي بعد الشرط الرئيسي."},
+        {"لاجل", "حلقة تكرار ضمن مدى من الاعداد او مجموعة عناصر حاوية كالمصفوفة."},
+        {"لأجل", "حلقة تكرار ضمن مدى من الاعداد او مجموعة عناصر حاوية كالمصفوفة."},
+        {"استمر", "الانتقال إلى التكرار التالي."},
+        {"استورد", "جلب مكتبة أو ملف خارجي للبرنامج."},
+        {"ارجع", "إرجاع قيمة من دالة."},
+        {"اذا", "تنفيذ أمر في حال تحقق الشرط."},
+        {"إذا", "تنفيذ أمر في حال تحقق الشرط."},
+        {"احذف", "إزالة متغير من الذاكرة."},
+        {"ادخل", "قراءة مدخل من المستخدم."},
+        {"بينما", "حلقة تعمل طالما أن الشرط صحيح."},
+        {"توقف", "إيقاف تنفيذ الحلقة."},
+        {"خطا", "قيمة منطقية تدل على أن الشرط غير محقق."},
+        {"خطأ", "قيمة منطقية تدل على أن الشرط غير محقق."},
+        {"صح", "قيمة منطقية تدل على أن الشرط محقق."},
+        {"دالة", "تعريف دالة جديدة لتنفيذ مجموعة اوامر معينة."},
+        {"صنف", "إنشاء كائن."},
+        {"عدم", "قيمة فارغة."},
+        {"ليس", "نفي شرط أو قيمة."},
+        {"مدى", "تحديد مجموعة أرقام بين قيمتين."},
+        {"والا", "تنفيذ أمر إذا لم يتحقق الشرط السابق."},
+        {"وإلا", "تنفيذ أمر إذا لم يتحقق الشرط السابق."},
+        {"عام", "إخبار النطاق الداخلي أن هذا المتغير عام."},
+        {"و", "تحقق الشرطين معًا."},
+        {"او", "يكفي تحقق أحد الشرطين."},
+        {"اضف", "إضافة عنصر إلى المصفوفة."},
+        {"امسح", "حذف عنصر من المصفوفة."},
+        {"ادرج", "إدخال عنصر في موضع محدد داخل المصفوفة."},
+        {"غفوة", "تأخير تنفيذ البرنامج لفترة معينة."},
+        {"_تهيئة_", "تهيئة الكائن بشكل تلقائي في حال تم استدعائه."}
+    };    
 
     popup = new QWidget(editor, Qt::ToolTip | Qt::FramelessWindowHint);
+    popup->setStyleSheet(
+        "QWidget { background-color: #242533; color: #cccccc; }"
+        "QListWidget { background-color: #242533; color: #cccccc; }"
+        "QListWidget::item { padding: 7px; }"
+        "QListWidget::item:selected { background-color: #3a3d54; padding: 0 12px 0 0; }");
+
+    QVBoxLayout* popupLayout = new QVBoxLayout(popup);
+    popupLayout->setContentsMargins(0, 0, 0, 0);
+
     listWidget = new QListWidget(popup);
-    popup->setStyleSheet("QWidget { background-color: #242533; color: #cccccc;}");
 
-    QVBoxLayout* layout = new QVBoxLayout(popup);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(listWidget);
-    popup->setLayout(layout);
+    QLabel* descriptionLabel = new QLabel(popup);
+    descriptionLabel->setStyleSheet("color: #cccccc; padding: 3px;");
+    descriptionLabel->setWordWrap(true);
 
-    editor->installEventFilter(this);
+    // set layouts
+    popupLayout->addWidget(listWidget);
+    popupLayout->addWidget(descriptionLabel);
+    popup->setLayout(popupLayout);
 
+    // connections
+    connect(listWidget, &QListWidget::currentItemChanged, this,
+            [=](QListWidgetItem* current, QListWidgetItem* previos) {
+        if (!current) return;
+        QString desc = descriptions.value(current->text(), QString());
+        if (desc.isEmpty()) {
+            return;
+        }
+        descriptionLabel->setText(desc);
+    });
     connect(editor, &QPlainTextEdit::textChanged, this, &AutoComplete::showCompletion);
     connect(listWidget, &QListWidget::itemClicked, this, &AutoComplete::insertCompletion);
+
+    // filters
+    editor->installEventFilter(this);
 }
 
 
@@ -99,7 +196,7 @@ void AutoComplete::showPopup() {
     QPoint pos = editor->viewport()->mapToGlobal(rect.bottomLeft());
 
     // Set the minimum width of the popup
-    popup->setFixedSize(256, 128);
+    popup->setFixedSize(450, 250);
     int popupWidth = popup->width();
     int popupHeight = popup->height();
 
@@ -138,9 +235,55 @@ void AutoComplete::insertCompletion() {
     QListWidgetItem* item = listWidget->currentItem();
     if (!item) return;
 
+    QString word = item->text();
+    if (!shortcuts.contains(word)) return;
+
+    QString text = shortcuts.value(word);
     QTextCursor cursor = editor->textCursor();
     cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
     cursor.removeSelectedText();
-    cursor.insertText(item->text());
+
+    placeholderPositions.clear();
+
+    // البحث عن جميع العلامات مثل $1 وغيرها
+    QRegularExpression re("\\$(\\d+)");
+    QRegularExpressionMatchIterator i = re.globalMatch(text);
+    QList<QPair<int, int>> matches;
+
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
+        int pos = match.capturedStart();
+        int length = match.capturedLength();
+        matches.append(qMakePair(pos, length));
+    }
+
+    // فرز العلامات حسب ظهورها
+    std::sort(matches.begin(), matches.end(),
+              [](const QPair<int, int> &a, const QPair<int, int> &b) {
+        return a.first < b.first;
+    });
+
+    // إزالة العلامات وحساب المواقع الجديدة
+    QString newText = text;
+    int offset = 0;
+    for (const auto &match : matches) {
+        int originalPos = match.first - offset;
+        int length = match.second;
+        newText.remove(originalPos, length);
+        placeholderPositions.append(originalPos);
+        offset += length;
+    }
+
+    cursor.insertText(newText);
+
+    // حفظ المواقع وتحديد المؤشر
+    if (!placeholderPositions.isEmpty()) {
+        currentPlaceholderIndex = 0;
+        cursor.setPosition(cursor.position() - newText.length() + placeholderPositions.first());
+        editor->setTextCursor(cursor);
+    } else {
+        editor->setTextCursor(cursor);
+    }
+
     hidePopup();
 }

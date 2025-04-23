@@ -67,8 +67,8 @@ SPMenuBar::SPMenuBar(QWidget* parent) {
         QMenu {
             color: #dddddd;
             background-color: #1e202e;
-            border-bottom: 1px solid #b850fa;
-            border-left: 1px solid #b850fa;
+            border-bottom: 1px solid #10a8f4;
+            border-left: 1px solid #10a8f4;
             border-radius: 3px;
         }
         QMenu::item {

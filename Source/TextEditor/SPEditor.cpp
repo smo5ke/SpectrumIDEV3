@@ -7,7 +7,7 @@
 
 SPEditor::SPEditor(QWidget* parent) {
     setAcceptDrops(true);
-    this->setStyleSheet("QPlainTextEdit { background-color: #141520; color: #cccccc;}");
+    this->setStyleSheet("QPlainTextEdit { background-color: #141520; color: #cccccc; }");
     this->setTabStopDistance(32);
 
     // set "force" cursor and text direction from right to left

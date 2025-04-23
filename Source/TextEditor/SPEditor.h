@@ -15,6 +15,9 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent* event);
     int lineNumberAreaWidth() const;
 
+    QString getCurrentLineIndentation(const QTextCursor &cursor) const;
+    void const curserIndentation();
+
 protected:
     void resizeEvent(QResizeEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;

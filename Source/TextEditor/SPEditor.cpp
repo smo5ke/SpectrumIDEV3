@@ -38,10 +38,12 @@ bool SPEditor::eventFilter(QObject* obj, QEvent* event) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
         // Handle Shift+Return or Shift+Enter
-        if ((keyEvent->key() == Qt::Key_Return or keyEvent->key() == Qt::Key_Enter)
-            and (keyEvent->modifiers() & Qt::ShiftModifier)) {
-
-            return true; // Event handled
+        if (keyEvent->key() == Qt::Key_Return or keyEvent->key() == Qt::Key_Enter) {
+            if(keyEvent->modifiers() & Qt::ShiftModifier) {
+                return true; // Event handled
+            }
+            curserIndentation();
+            return true;
         }
     }
 
@@ -185,3 +187,47 @@ void SPEditor::dragLeaveEvent(QDragLeaveEvent* event) {
     event->accept();
 }
 
+
+/* ---------------------------------- Indentation ---------------------------------- */
+
+void const SPEditor::curserIndentation() {
+    QTextCursor cursor = textCursor();
+    QString lineText = cursor.block().text();
+    int cursorPosInLine = cursor.positionInBlock();
+    QString currentIndentation = getCurrentLineIndentation(cursor);
+
+    // Check if the cursor is not at the very beginning of the line
+    if (cursorPosInLine > 0) {
+        int checkPos = cursorPosInLine - 1;
+        while (checkPos >= 0 and lineText.at(checkPos).isSpace()) {
+            checkPos--;
+        }
+
+        if (checkPos >= 0 and lineText.at(checkPos) == ':') {
+            currentIndentation += "\t"; // Add a tab
+        }
+    }
+
+    cursor.beginEditBlock();
+    cursor.insertText("\n" + currentIndentation);
+    cursor.endEditBlock();
+    setTextCursor(cursor);
+}
+
+QString SPEditor::getCurrentLineIndentation(const QTextCursor &cursor) const {
+    QTextBlock block = cursor.block();
+    if (!block.isValid()) {
+        return QString();
+    }
+
+    QString lineText = block.text();
+    QString indentation;
+    for (const QChar &ch : lineText) {
+        if (ch == ' ' or ch == '\t') {
+            indentation += ch;
+        } else {
+            break;
+        }
+    }
+    return indentation;
+}

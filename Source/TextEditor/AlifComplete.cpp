@@ -14,17 +14,64 @@
 AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
     : QObject(parent), editor(editor) {
     keywords = QStringList()
-        << "اطبع" << "اواذا" << "لاجل" << "أوإذا"
-        << "استمر" << "استورد" << "ارجع" << "اذا"
-        << "احذف" << "ادخل" << "بينما" << "توقف"
-        << "خطأ" << "دالة" << "صنف" << "صح"
-        << "عدم" << "ليس" << "مدى" << "والا"
-        << "عام" << "و" << "او" << "إذا"
-        << "اضف" << "امسح" << "ادرج"
-        << "صحيح" << "عشري" << "غفوة" << "_تهيئة_";
+               << "اطبع"
+               << "اذا"
+               << "اواذا"
+               << "والا"
+               << "استمر"
+               << "ارجع"
+               << "استورد"
+               << "احذف"
+               << "ادخل"
+               << "او"
+               << "انتظر"
+
+               << "بينما"
+
+               << "توقف"
+
+               << "حاول"
+
+               << "خطأ"
+               << "خلل"
+
+               << "دالة"
+
+               << "صنف"
+               << "صح"
+               << "صحيح"
+
+               << "عدم"
+               << "عند"
+               << "عام"
+               << "عشري"
+
+               << "في"
+
+               << "ك"
+
+               << "لاجل"
+               << "ليس"
+
+               << "مرر"
+               << "من"
+               << "مزامنة"
+               << "مدى"
+
+               << "نطاق"
+               << "نهاية"
+
+               << "هل"
+
+               << "والا"
+               << "ولد"
+               << "و"
+
+               << "_تهيئة_";
 
     shortcuts = {
         {"اطبع", "اطبع($1)"},
+        {"اذا", "اذا $1:\n\tمرر\nوالا:\n\tمرر"},
         {"اواذا", "اواذا $1:"},
         {"أوإذا", "أوإذا $1:"},
         {"لاجل", "لاجل $1 في :"},
@@ -32,7 +79,6 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
         {"استمر", "استمر"},
         {"استورد", "استورد $1"},
         {"ارجع", "ارجع $1"},
-        {"اذا", "اذا $1:"},
         {"إذا", "إذا $1:"},
         {"احذف", "احذف $1"},
         {"ادخل", "ادخل($1)"},
@@ -61,6 +107,8 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
     };        
     descriptions = {
         {"اطبع", "لعرض نص أو رقم أو قيمة في الطرفية."},
+        {"اذا", "تنفيذ أمر في حال تحقق الشرط."},
+        {"إذا", "تنفيذ أمر في حال تحقق الشرط."},
         {"اواذا", "شرط إضافي بعد الشرط الرئيسي."},
         {"أوإذا", "شرط إضافي بعد الشرط الرئيسي."},
         {"لاجل", "حلقة تكرار ضمن مدى من الاعداد او مجموعة عناصر حاوية كالمصفوفة."},
@@ -68,8 +116,6 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
         {"استمر", "الانتقال إلى التكرار التالي."},
         {"استورد", "جلب مكتبة أو ملف خارجي للبرنامج."},
         {"ارجع", "إرجاع قيمة من دالة."},
-        {"اذا", "تنفيذ أمر في حال تحقق الشرط."},
-        {"إذا", "تنفيذ أمر في حال تحقق الشرط."},
         {"احذف", "إزالة متغير من الذاكرة."},
         {"ادخل", "قراءة مدخل من المستخدم."},
         {"بينما", "حلقة تعمل طالما أن الشرط صحيح."},
@@ -82,16 +128,9 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
         {"عدم", "قيمة فارغة."},
         {"ليس", "نفي شرط أو قيمة."},
         {"مدى", "تحديد مجموعة أرقام بين قيمتين."},
-        {"والا", "تنفيذ أمر إذا لم يتحقق الشرط السابق."},
-        {"وإلا", "تنفيذ أمر إذا لم يتحقق الشرط السابق."},
         {"عام", "إخبار النطاق الداخلي أن هذا المتغير عام."},
         {"و", "تحقق الشرطين معًا."},
         {"او", "يكفي تحقق أحد الشرطين."},
-        {"اضف", "إضافة عنصر إلى المصفوفة."},
-        {"امسح", "حذف عنصر من المصفوفة."},
-        {"ادرج", "إدخال عنصر في موضع محدد داخل المصفوفة."},
-        {"غفوة", "تأخير تنفيذ البرنامج لفترة معينة."},
-        {"_تهيئة_", "تهيئة الكائن بشكل تلقائي في حال تم استدعائه."}
     };    
 
     popup = new QWidget(editor, Qt::ToolTip | Qt::FramelessWindowHint);
@@ -133,24 +172,23 @@ AutoComplete::AutoComplete(QPlainTextEdit* editor, QObject* parent)
 }
 
 
-
 bool AutoComplete::eventFilter(QObject* obj, QEvent* event) {
     if (obj == editor and event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
         if (popup->isVisible()) {
-            switch (keyEvent->key()) {
-            case Qt::Key_Tab:
-            case Qt::Key_Return:
+            if (keyEvent->key() == Qt::Key_Tab
+                or keyEvent->key() == Qt::Key_Return
+                or keyEvent->key() == Qt::Key_Enter) {
                 insertCompletion();
                 return true;
-            case Qt::Key_Escape:
+            } else if (keyEvent->key() == Qt::Key_Escape) {
                 hidePopup();
                 return true;
-            case Qt::Key_Up:
-            case Qt::Key_Down:
+            } else if (keyEvent->key() == Qt::Key_Up
+                       or keyEvent->key() == Qt::Key_Down) {
                 QCoreApplication::sendEvent(listWidget, event);
                 return true;
-            default:
+            } else {
                 return false;
             }
         }
@@ -158,8 +196,7 @@ bool AutoComplete::eventFilter(QObject* obj, QEvent* event) {
     return QObject::eventFilter(obj, event);
 }
 
-QString AutoComplete::getCurrentWord() const
-{
+QString AutoComplete::getCurrentWord() const {
     QTextCursor cursor = editor->textCursor();
     cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
     return cursor.selectedText().trimmed();
@@ -257,12 +294,6 @@ void AutoComplete::insertCompletion() {
         matches.append(qMakePair(pos, length));
     }
 
-    // فرز العلامات حسب ظهورها
-    std::sort(matches.begin(), matches.end(),
-              [](const QPair<int, int> &a, const QPair<int, int> &b) {
-        return a.first < b.first;
-    });
-
     // إزالة العلامات وحساب المواقع الجديدة
     QString newText = text;
     int offset = 0;
@@ -278,7 +309,6 @@ void AutoComplete::insertCompletion() {
 
     // حفظ المواقع وتحديد المؤشر
     if (!placeholderPositions.isEmpty()) {
-        currentPlaceholderIndex = 0;
         cursor.setPosition(cursor.position() - newText.length() + placeholderPositions.first());
         editor->setTextCursor(cursor);
     } else {
@@ -286,4 +316,10 @@ void AutoComplete::insertCompletion() {
     }
 
     hidePopup();
+}
+
+
+
+bool const AutoComplete::isPopupVisible() {
+    return popup->isVisible();
 }

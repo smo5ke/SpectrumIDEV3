@@ -12,6 +12,8 @@ class AutoComplete : public QObject
 public:
     explicit AutoComplete(QPlainTextEdit* editor, QObject* parent = nullptr);
 
+    bool const isPopupVisible();
+
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
 
@@ -27,7 +29,6 @@ private:
     QMap<QString, QString> shortcuts;
     QMap<QString, QString> descriptions;
     QList<int> placeholderPositions;
-    int currentPlaceholderIndex;
 
     QString getCurrentWord() const;
     void showPopup();

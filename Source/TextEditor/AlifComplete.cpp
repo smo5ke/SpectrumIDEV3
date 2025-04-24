@@ -5,9 +5,6 @@
 #include <QGuiApplication>
 #include <QScreen>
 #include <QStringList>
-#include <QPushButton>
-#include <QDesktopServices>
-#include <QUrl>
 #include <QLabel>
 
 

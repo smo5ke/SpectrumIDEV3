@@ -36,17 +36,22 @@ SPEditor::SPEditor(QWidget* parent) {
 bool SPEditor::eventFilter(QObject* obj, QEvent* event) {
     if (obj == this and event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-
+        if (autoComplete->isPopupVisible()) {
+            if (keyEvent->key() == Qt::Key_Return
+                or keyEvent->key() == Qt::Key_Enter) {
+                return false;
+            }
+        }
         // Handle Shift+Return or Shift+Enter
-        if (keyEvent->key() == Qt::Key_Return or keyEvent->key() == Qt::Key_Enter) {
-            if(keyEvent->modifiers() & Qt::ShiftModifier) {
+        if (keyEvent->key() == Qt::Key_Return
+             or keyEvent->key() == Qt::Key_Enter) {
+            if (keyEvent->modifiers() & Qt::ShiftModifier) {
                 return true; // Event handled
             }
             curserIndentation();
             return true;
         }
     }
-
     return QPlainTextEdit::eventFilter(obj, event);
 }
 

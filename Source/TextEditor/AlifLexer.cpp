@@ -112,6 +112,7 @@ bool Lexer::isKeyword(const QString& word) {
     "اذا", "إذا", "ليس", "مرر", "عدم", "ولد", "صنف", "خطا", "خطأ", "عام",
     "احذف", "دالة", "لاجل", "لأجل", "والا", "وإلا", "توقف", "نطاق", "ارجع",
     "اواذا", "أوإذا", "بينما", "انتظر", "استمر", "مزامنة", "استورد",
+     "حاول" , "خلل" , "نهاية"
     };
     return keywords.contains(word);
 }
@@ -126,7 +127,7 @@ bool Lexer::isKeyword1(const QString& word) {
 
 bool Lexer::isKeyword2(const QString& word) {
     static const QSet<QString> keywords = {
-        "_تهيئة_", "هذا"
+        "_تهيئة_", "هذا", "اصل"
     };
     return keywords.contains(word);
 }
